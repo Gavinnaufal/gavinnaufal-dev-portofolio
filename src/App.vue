@@ -43,9 +43,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="min-h-screen overflow-hidden bg-white text-ink">
+  <div class="flex min-h-dvh flex-col overflow-x-hidden bg-white text-ink">
     <Navbar />
-    <main>
+    <main class="flex-1">
       <Hero />
       <About />
       <Skills />

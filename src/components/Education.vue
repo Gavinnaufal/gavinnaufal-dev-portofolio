@@ -44,12 +44,12 @@ const educations = [
       <div class="mb-16 max-w-3xl" data-reveal>
         <p class="eyebrow bg-white">EDUCATION</p>
         <h2
-          class="text-4xl font-black uppercase leading-tight text-ink sm:text-5xl lg:text-6xl"
+          class="section-title"
         >
           My <strong class="bg-gradient-to-r from-black to-gray-500 bg-clip-text text-transparent">Education</strong> Journey
         </h2>
         <p
-          class="mt-5 max-w-2xl text-base font-medium leading-relaxed text-muted sm:text-lg"
+          class="section-copy mt-5 max-w-2xl"
         >
           Pendidikan yang membentuk saya menjadi seorang Programmer.
         </p>
@@ -65,7 +65,7 @@ const educations = [
           <article
             v-for="(education, index) in educations"
             :key="education.title"
-            class="group relative grid grid-cols-[24px_1fr] gap-6 sm:gap-8"
+            class="group relative grid grid-cols-[24px_minmax(0,1fr)] gap-4 min-[420px]:gap-6 sm:gap-8"
             data-reveal
             :data-delay="index + 1"
           >
@@ -89,19 +89,19 @@ const educations = [
               >
                 <div>
                   <h3
-                    class="text-2xl font-black uppercase leading-tight text-ink transition duration-300 group-hover:text-slate-700 sm:text-3xl"
+                    class="text-[1.65rem] font-black uppercase leading-tight text-ink transition duration-300 group-hover:text-slate-700 min-[420px]:text-2xl sm:text-3xl"
                   >
                     {{ education.title }}
                   </h3>
                   <p
-                    class="mt-2 text-sm font-bold uppercase tracking-[0.16em] text-muted"
+                    class="mt-2 text-sm font-bold uppercase leading-relaxed tracking-[0.08em] text-muted sm:tracking-[0.16em]"
                   >
                     {{ education.subtitle }}
                   </p>
                 </div>
 
                 <p
-                  class="shrink-0 text-sm font-bold uppercase tracking-[0.14em] text-muted sm:pt-2 sm:text-right"
+                  class="shrink-0 text-sm font-bold uppercase leading-relaxed tracking-[0.08em] text-muted sm:pt-2 sm:text-right sm:tracking-[0.14em]"
                 >
                   {{ education.period }}
                 </p>
@@ -111,7 +111,7 @@ const educations = [
                 <li
                   v-for="item in education.items"
                   :key="item"
-                  class="flex gap-3 text-sm font-medium leading-relaxed text-muted sm:text-base"
+                  class="flex gap-3 text-base font-medium leading-relaxed text-muted"
                 >
                   <span
                     class="mt-2 size-1.5 shrink-0 rounded-full bg-slate-300"
