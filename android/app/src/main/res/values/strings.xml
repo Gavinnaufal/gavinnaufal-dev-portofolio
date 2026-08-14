@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Portofolio Gavin</string>
+    <string name="title_activity_main">Portofolio Gavin</string>
+    <string name="package_name">com.gavin.portofolio</string>
+    <string name="custom_url_scheme">com.gavin.portofolio</string>
+</resources>

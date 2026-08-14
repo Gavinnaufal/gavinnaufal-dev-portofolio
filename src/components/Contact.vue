@@ -1,43 +1,66 @@
 <script setup>
-import { contacts } from '../data/portfolio'
+import portfolioData from '@/data/portfolio.json'
+
+const { contact } = portfolioData
 </script>
 
 <template>
-  <section id="contact" class="bg-white">
-    <div class="section-shell">
-      <div class="premium-card overflow-hidden">
-        <div class="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-          <div class="relative overflow-hidden p-5 text-center min-[420px]:p-6 sm:p-10 sm:text-left lg:p-12" data-reveal>
-            <div class="absolute right-8 top-8 h-40 w-40 rounded-2xl border border-line bg-mist/80 blur-2xl"></div>
-            <p class="eyebrow relative">Contact</p>
-            <h2 class="section-title relative max-w-3xl lg:text-7xl">
-              Let's <strong class="bg-gradient-to-b from-zinc-900 to-zinc-400 bg-clip-text text-transparent">work</strong> Together
-            </h2>
-            <p class="section-copy relative mx-auto mt-6 max-w-xl sm:mx-0">
-              Siap membangun website modern, responsive, dan clean untuk kebutuhan personal,
-              sekolah, atau bisnis kecil.
+  <section id="contact" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
+    <div class="editorial-shell">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-start w-full">
+        <!-- Left 6 Columns: Statement & Status -->
+        <div class="space-y-4 sm:space-y-6 lg:col-span-6 min-w-0" data-reveal-heading>
+          <span class="font-mono text-xs text-signal tracking-widest uppercase block">
+            05 // {{ contact.eyebrow }}
+          </span>
+
+          <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase leading-[1.05] tracking-tight text-chalk break-words">
+            {{ contact.heading }}
+          </h2>
+
+          <p class="text-sm sm:text-base lg:text-lg leading-relaxed text-silver">
+            {{ contact.description }}
+          </p>
+
+          <!-- Status Indicator Box -->
+          <div class="border border-hairline bg-surface p-4 sm:p-5 font-mono text-xs">
+            <div class="flex items-center gap-2.5">
+              <span class="size-2 rounded-full bg-signal animate-pulse"></span>
+              <span class="text-chalk font-semibold uppercase tracking-wider">Status Ketersediaan</span>
+            </div>
+            <p class="mt-2 text-silver">
+              {{ contact.status }}
             </p>
           </div>
+        </div>
 
-          <div class="border-t border-line bg-soft p-4 sm:p-6 lg:border-l lg:border-t-0" data-reveal data-delay="1">
-            <div class="grid gap-3">
-              <a
-                v-for="contact in contacts"
-                :key="contact.label"
-                :href="contact.href"
-                target="_blank"
-                rel="noreferrer"
-                class="group flex min-h-20 flex-col items-stretch justify-between gap-4 rounded-2xl border border-line bg-white p-4 text-center shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-soft min-[480px]:flex-row min-[480px]:items-center min-[480px]:text-left"
-              >
-                <span class="min-w-0">
-                  <span class="block text-sm font-bold uppercase leading-snug text-muted">{{ contact.label }}</span>
-                  <span class="mt-1 block break-all text-lg font-bold leading-snug text-ink sm:text-base">{{ contact.value }}</span>
-                </span>
-                <span class="grid min-h-11 w-full shrink-0 place-items-center rounded-2xl bg-soft px-4 text-base font-black text-ink transition group-hover:bg-ink group-hover:text-white min-[480px]:size-11 min-[480px]:w-auto sm:size-10 sm:text-sm">
-                  Go
-                </span>
-              </a>
-            </div>
+        <!-- Right 6 Columns: Tabular Channel Directory -->
+        <div class="space-y-4 lg:col-span-6 w-full min-w-0" data-reveal-item>
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-dim">// KANAL KOMUNIKASI</p>
+
+          <div class="divide-y divide-hairline border-y border-hairline font-mono">
+            <a
+              v-for="item in contact.items"
+              :key="item.label"
+              :href="item.href"
+              target="_blank"
+              rel="noreferrer"
+              class="group flex items-center justify-between p-4 sm:p-5 transition-colors hover:bg-surface-elevated gap-3"
+            >
+              <div class="space-y-1 min-w-0 flex-1">
+                <span class="text-[10px] uppercase tracking-widest text-dim block">// {{ item.label }}</span>
+                <p class="font-sans text-base sm:text-lg lg:text-xl font-bold text-chalk transition-colors group-hover:text-signal break-all">
+                  {{ item.value }}
+                </p>
+                <p v-if="item.desc" class="text-xs text-silver">
+                  {{ item.desc }}
+                </p>
+              </div>
+
+              <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center border border-hairline bg-surface text-chalk transition-all duration-300 group-hover:border-signal group-hover:bg-signal group-hover:text-white">
+                <span class="arrow-reveal text-sm">↗</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>

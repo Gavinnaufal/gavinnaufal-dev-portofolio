@@ -1,85 +1,172 @@
 <script setup>
-import { projects } from '../data/portfolio'
+import portfolioData from '@/data/portfolio.json'
+
+const { projects } = portfolioData
 </script>
 
 <template>
-  <section id="projects" class="bg-white">
-    <div class="section-shell">
-      <div class="mb-12 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-        <div data-reveal>
-          <p class="eyebrow">Projects</p>
-          <h2 class="max-w-4xl text-4xl font-black uppercase leading-tight text-ink sm:text-5xl lg:text-6xl">
-            Selected <strong class="bg-gradient-to-b from-zinc-900 to-zinc-400 bg-clip-text text-transparent">work</strong> with <strong class="bg-gradient-to-b from-zinc-900 to-zinc-400 bg-clip-text text-transparent">premium</strong> detail.
+  <section id="projects" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
+    <div class="editorial-shell">
+      <!-- Section Header -->
+      <div class="mb-14 sm:mb-16 flex flex-col justify-between gap-6 border-b border-hairline pb-8 sm:pb-10 lg:flex-row lg:items-end">
+        <div class="space-y-3 sm:space-y-4" data-reveal-heading>
+          <p class="font-mono text-xs uppercase tracking-widest text-signal">
+            // {{ projects.eyebrow }}
+          </p>
+
+          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight text-chalk">
+            {{ projects.title }}
           </h2>
         </div>
-        <p class="max-w-md text-base font-medium leading-relaxed text-muted" data-reveal data-delay="1">
-          Beberapa project yang ditampilkan adalah project dengan kualitas premium dan sesuai dengan kebutuhannya!
+
+        <p class="max-w-md text-sm sm:text-base leading-relaxed text-silver" data-reveal-item>
+          {{ projects.description }}
         </p>
       </div>
 
-      <div class="grid gap-5 lg:grid-cols-6">
+      <!-- Featured Case Studies Showcase -->
+      <div class="space-y-16 sm:space-y-24">
         <article
-          v-for="(project, index) in projects"
+          v-for="(project, index) in projects.items"
           :key="project.name"
-          class="premium-card group overflow-hidden"
-          :class="project.featured ? 'lg:col-span-6 xl:grid xl:grid-cols-[1.08fr_0.92fr]' : 'lg:col-span-3'"
-          data-reveal
-          :data-delay="index + 1"
+          class="project-row group grid items-center gap-6 sm:gap-8 border-b border-hairline pb-12 sm:pb-16 lg:grid-cols-12 lg:gap-12"
+          data-reveal-item
         >
+          <!-- Media Column (7 Cols on LG) -->
           <div
-            class="relative min-h-72 overflow-hidden bg-gradient-to-br p-5"
-            :class="[project.tone, project.featured ? 'xl:min-h-[420px]' : '']"
+            class="relative overflow-hidden border border-hairline-strong bg-surface transition-colors duration-500 hover:border-signal/70 lg:col-span-7 w-full"
+            :class="index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'"
           >
-            <div class="absolute inset-5 rounded-2xl border border-white/80 bg-white/40"></div>
-            <div class="relative h-full min-h-64 overflow-hidden rounded-2xl border border-line bg-white shadow-soft transition duration-700 group-hover:scale-[1.025]">
+            <!-- Top Bar inside frame -->
+            <div class="flex items-center justify-between border-b border-hairline bg-[#090a0c]/90 px-3.5 sm:px-4 py-2 sm:py-2.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-silver">
+              <div class="flex items-center gap-2">
+                <span class="text-signal font-bold">[{{ String(index + 1).padStart(2, '0') }}]</span>
+                <span class="text-chalk font-semibold truncate">{{ project.category }}</span>
+              </div>
+              <span class="text-dim shrink-0">{{ project.year }}</span>
+            </div>
+
+            <!-- Image Viewport with Smooth Hover Zoom -->
+            <div class="relative aspect-[16/10] w-full overflow-hidden bg-neutral-950">
               <img
                 :src="project.image"
-                :alt="`Preview ${project.name}`"
-                class="h-full min-h-64 w-full object-cover"
+                :alt="`Preview of ${project.name}`"
+                class="h-full w-full object-cover grayscale contrast-110 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:grayscale-0"
                 loading="lazy"
-              >
+              />
             </div>
           </div>
 
-          <div class="flex flex-col justify-between gap-8 p-6 sm:p-8">
-            <div>
-              <div class="mb-4 flex flex-wrap items-center gap-2">
-                <span class="rounded-full border border-line bg-soft px-3 py-1 text-xs font-bold uppercase text-muted">
-                  {{ project.featured ? 'Featured' : 'Project' }}
-                </span>
-                <span class="rounded-full border border-line bg-white px-3 py-1 text-xs font-bold uppercase text-muted">
-                  Web
-                </span>
-              </div>
-              <h3 class="text-2xl font-black uppercase leading-tight text-ink sm:text-3xl">
+          <!-- Narrative & Specs Column (5 Cols on LG) -->
+          <div
+            class="space-y-4 sm:space-y-5 lg:col-span-5 w-full min-w-0"
+            :class="index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'"
+          >
+            <div class="space-y-1.5 sm:space-y-2">
+              <span class="font-mono text-xs uppercase tracking-widest text-signal">
+                PROJECT // {{ String(index + 1).padStart(2, '0') }}
+              </span>
+              <h3 class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-chalk break-words">
                 {{ project.name }}
               </h3>
-              <p class="mt-4 text-base font-medium leading-relaxed text-muted">
-                {{ project.description }}
+              <p v-if="project.subtitle" class="font-mono text-xs uppercase tracking-wider text-dim">
+                {{ project.subtitle }}
               </p>
             </div>
 
-            <div>
-              <div class="mb-6 flex flex-wrap gap-2">
+            <p class="text-sm sm:text-base leading-relaxed text-silver">
+              {{ project.description }}
+            </p>
+
+            <!-- Tech Stack Tags -->
+            <div class="space-y-2 pt-1 sm:pt-2">
+              <span class="block font-mono text-[10px] uppercase tracking-widest text-dim">// TECH STACK</span>
+              <div class="flex flex-wrap gap-1.5 sm:gap-2">
                 <span
                   v-for="tech in project.stack"
                   :key="tech"
-                  class="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-slate-600 shadow-sm"
+                  class="border border-hairline bg-surface px-2 sm:px-2.5 py-1 font-mono text-[11px] sm:text-xs text-chalk"
                 >
                   {{ tech }}
                 </span>
               </div>
-              <div class="flex flex-col gap-3 sm:flex-row">
-                <a :href="project.liveUrl" target="_blank" rel="noreferrer" class="button-primary min-h-11 px-5">
-                  Live Preview
+            </div>
+
+            <!-- Direct Action Buttons -->
+            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2 sm:pt-3">
+              <a
+                v-if="project.liveUrl"
+                :href="project.liveUrl"
+                target="_blank"
+                rel="noreferrer"
+                class="btn-editorial-primary text-xs py-2.5 sm:py-3 px-4 sm:px-6"
+              >
+                <span>Live Preview</span>
+                <span class="arrow-reveal font-mono">↗</span>
+              </a>
+              <a
+                v-if="project.githubUrl"
+                :href="project.githubUrl"
+                target="_blank"
+                rel="noreferrer"
+                class="btn-editorial-secondary text-xs py-2.5 sm:py-3 px-4 sm:px-6"
+              >
+                <span>GitHub Code</span>
+                <span class="arrow-reveal font-mono">↗</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Tabular Directory Table at Bottom -->
+      <div class="mt-14 sm:mt-16 space-y-4" data-reveal-item>
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-dim">// ALL PROJECTS DIRECTORY</p>
+        <div class="border border-hairline bg-surface font-mono text-xs overflow-hidden">
+          <div class="hidden grid-cols-12 border-b border-hairline bg-[#090a0c] px-4 sm:px-6 py-3 uppercase tracking-widest text-dim sm:grid">
+            <div class="col-span-1">NO.</div>
+            <div class="col-span-5">TITLE</div>
+            <div class="col-span-3">CATEGORY</div>
+            <div class="col-span-3 text-right">LINKS</div>
+          </div>
+          <div class="divide-y divide-hairline">
+            <div
+              v-for="(item, idx) in projects.items"
+              :key="item.name"
+              class="group flex flex-col gap-2 p-4 transition-colors hover:bg-surface-elevated sm:grid sm:grid-cols-12 sm:items-center sm:gap-0 sm:px-6"
+            >
+              <div class="text-dim group-hover:text-signal sm:col-span-1">
+                {{ String(idx + 1).padStart(2, '0') }}
+              </div>
+              <div class="font-sans font-bold text-chalk group-hover:text-signal text-sm sm:text-base sm:col-span-5 break-words">
+                {{ item.name }}
+              </div>
+              <div class="uppercase text-dim text-[11px] sm:text-xs sm:col-span-3">
+                {{ item.category }}
+              </div>
+              <div class="flex items-center gap-4 pt-1 sm:pt-0 sm:col-span-3 sm:justify-end">
+                <a
+                  v-if="item.liveUrl"
+                  :href="item.liveUrl"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="text-chalk underline decoration-hairline transition-colors hover:decoration-signal text-xs"
+                >
+                  LIVE ↗
                 </a>
-                <a :href="project.githubUrl" target="_blank" rel="noreferrer" class="button-secondary min-h-11 px-5">
-                  GitHub
+                <a
+                  v-if="item.githubUrl"
+                  :href="item.githubUrl"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="text-dim transition-colors hover:text-chalk text-xs"
+                >
+                  CODE ↗
                 </a>
               </div>
             </div>
           </div>
-        </article>
+        </div>
       </div>
     </div>
   </section>

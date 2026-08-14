@@ -1,15 +1,26 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { navItems } from '../data/portfolio'
+import portfolioData from '@/data/portfolio.json'
+import { isSoundEnabled, playClickSound, playHoverSound, toggleSound } from '@/utils/audio'
+
+const props = defineProps({
+  lenis: {
+    type: Object,
+    default: null,
+  },
+})
+
+const { navigation } = portfolioData
+const navItems = navigation.links
 
 const isScrolled = ref(false)
 const isOpen = ref(false)
-const activeSection = ref('home')
+const activeSection = ref('')
 
 const updateNavigation = () => {
-  isScrolled.value = window.scrollY > 18
+  isScrolled.value = window.scrollY > 30
 
-  const scrollPosition = window.scrollY + 160
+  const scrollPosition = window.scrollY + 200
   const sections = navItems.map((item) => document.getElementById(item.id)).filter(Boolean)
 
   for (let index = sections.length - 1; index >= 0; index -= 1) {
@@ -20,27 +31,67 @@ const updateNavigation = () => {
   }
 }
 
-const closeMenu = () => {
-  isOpen.value = false
-}
-
-const handleKeydown = (event) => {
-  if (event.key === 'Escape') {
+const handleKeydown = (e) => {
+  if (e.key === 'Escape' && isOpen.value) {
     closeMenu()
   }
 }
 
 const handleResize = () => {
-  if (window.innerWidth >= 1024) {
+  if (window.innerWidth >= 768 && isOpen.value) {
     closeMenu()
   }
+}
+
+const closeMenu = () => {
+  isOpen.value = false
+  document.body.style.overflow = ''
+  if (props.lenis) {
+    props.lenis.start()
+  }
+}
+
+const openMenu = () => {
+  isOpen.value = true
+  document.body.style.overflow = 'hidden'
+  if (props.lenis) {
+    props.lenis.stop()
+  }
+}
+
+const toggleMenu = () => {
+  playClickSound()
+  if (isOpen.value) {
+    closeMenu()
+  } else {
+    openMenu()
+  }
+}
+
+const scrollToSection = (id) => {
+  playClickSound()
+  closeMenu()
+
+  // Wait for body scroll unlock before executing smooth scroll
+  setTimeout(() => {
+    const target = document.getElementById(id)
+    if (!target) return
+
+    if (props.lenis) {
+      props.lenis.scrollTo(target, { offset: -70, duration: 1.0 })
+    } else {
+      const navOffset = window.innerWidth >= 640 ? 80 : 64
+      const y = target.getBoundingClientRect().top + window.pageYOffset - navOffset
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }, 60)
 }
 
 onMounted(() => {
   updateNavigation()
   window.addEventListener('scroll', updateNavigation, { passive: true })
   window.addEventListener('keydown', handleKeydown)
-  window.addEventListener('resize', handleResize)
+  window.addEventListener('resize', handleResize, { passive: true })
 })
 
 onBeforeUnmount(() => {
@@ -52,92 +103,221 @@ onBeforeUnmount(() => {
 
 watch(isOpen, (value) => {
   document.body.style.overflow = value ? 'hidden' : ''
+  if (props.lenis) {
+    if (value) {
+      props.lenis.stop()
+    } else {
+      props.lenis.start()
+    }
+  }
 })
 </script>
 
 <template>
-  <header class="fixed inset-x-0 top-0 z-50 px-3 pt-3 transition duration-500 min-[360px]:px-4 min-[360px]:pt-4 sm:px-5 sm:pt-3">
-    <nav
-      class="relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between rounded-3xl border px-4 py-3 transition duration-500 min-[360px]:px-5 min-[360px]:py-4 sm:rounded-2xl sm:px-5 sm:py-3"
-      :class="
-        isScrolled || isOpen
-          ? 'border-line bg-white/80 shadow-soft backdrop-blur-xl'
-          : 'border-transparent bg-white/0'
-      "
-      aria-label="Main navigation"
-    >
-      <a href="#home" class="flex min-h-12 items-center gap-3" @click="closeMenu">
-        <span class="block text-sm font-bold uppercase text-ink">
-          <img src="@/assets/images/logo-nav.png" alt="" class="size-12 sm:size-16">
-        </span>
-      </a>
-
-      <div class="hidden items-center gap-1 rounded-full border border-line bg-white/70 p-1 shadow-sm backdrop-blur lg:flex">
+  <header
+    class="fixed inset-x-0 top-0 z-50 transition-colors duration-300"
+    :class="[
+      isOpen
+        ? 'bg-[#090a0c] border-b border-hairline shadow-2xl'
+        : isScrolled
+          ? 'bg-[#090a0c]/90 backdrop-blur-md border-b border-hairline'
+          : 'bg-transparent border-b border-hairline/30',
+    ]"
+  >
+    <div class="editorial-shell">
+      <nav class="flex h-16 items-center justify-between gap-4 sm:h-20" aria-label="Main Navigation">
+        <!-- Brand / Name -->
         <a
-          v-for="item in navItems"
-          :key="item.id"
-          :href="`#${item.id}`"
-          class="relative rounded-full px-4 py-2 text-sm font-semibold text-muted transition duration-300 hover:text-ink xl:px-5"
-          :class="{ 'text-ink': activeSection === item.id }"
+          href="#home"
+          class="flex items-center gap-2.5 font-display text-base font-bold tracking-tight text-chalk transition-colors hover:text-signal focus:outline-none sm:text-lg shrink-0"
+          @click.prevent="scrollToSection('home')"
+          @mouseenter="playHoverSound"
         >
-          <span class="relative z-10">{{ item.label }}</span>
-          <span
-            v-if="activeSection === item.id"
-            class="absolute inset-0 rounded-full border border-line bg-white shadow-sm"
-            aria-hidden="true"
-          ></span>
+          <span class="size-2 rounded-full bg-signal"></span>
+          <span>{{ navigation.brand }}</span>
         </a>
-      </div>
 
-      <a href="#contact" class="button-secondary hidden min-h-10 px-5 lg:inline-flex">Let's Talk</a>
-
-      <button
-        class="grid size-14 place-items-center rounded-3xl border border-line bg-white/85 shadow-sm backdrop-blur transition hover:bg-white sm:size-11 sm:rounded-2xl lg:hidden"
-        type="button"
-        :aria-expanded="isOpen"
-        aria-label="Toggle navigation menu"
-        @click="isOpen = !isOpen"
-      >
-        <span class="relative h-4 w-7 sm:h-3.5 sm:w-5">
-          <span
-            class="absolute left-0 top-0 h-0.5 w-7 rounded-full bg-ink transition duration-300 sm:w-5"
-            :class="{ 'top-2 rotate-45 sm:top-1.5': isOpen }"
-          ></span>
-          <span
-            class="absolute bottom-0 left-0 h-0.5 w-7 rounded-full bg-ink transition duration-300 sm:w-5"
-            :class="{ 'bottom-[7px] -rotate-45 sm:bottom-1.5': isOpen }"
-          ></span>
-        </span>
-      </button>
-    </nav>
-
-    <div class="pointer-events-none fixed inset-0 z-10 lg:hidden">
-      <button
-        class="absolute inset-0 bg-ink/20 backdrop-blur-sm transition duration-300"
-        :class="isOpen ? 'pointer-events-auto opacity-100' : 'opacity-0'"
-        type="button"
-        aria-label="Close navigation menu"
-        @click="closeMenu"
-      ></button>
-
-      <div
-        class="pointer-events-auto absolute right-3 top-24 flex max-h-[calc(100dvh-7rem)] w-[calc(100vw-1.5rem)] max-w-sm flex-col overflow-hidden rounded-3xl border border-line bg-white/95 p-3 shadow-lift backdrop-blur-xl transition duration-300 ease-out min-[360px]:right-4 min-[360px]:w-[calc(100vw-2rem)] sm:right-5 sm:top-24"
-        :class="isOpen ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0 pointer-events-none'"
-      >
-        <div class="overflow-y-auto overscroll-contain pr-1">
+        <!-- Desktop Navigation Links -->
+        <div class="hidden items-center gap-1 font-mono text-xs uppercase tracking-widest md:flex">
           <a
             v-for="item in navItems"
             :key="item.id"
             :href="`#${item.id}`"
-            class="flex min-h-14 items-center justify-between gap-4 rounded-2xl px-5 py-4 text-lg font-bold leading-none text-muted transition hover:bg-soft hover:text-ink"
-            :class="{ 'bg-soft text-ink': activeSection === item.id }"
-            @click="closeMenu"
+            class="relative px-3.5 py-2 text-silver transition-colors duration-200 hover:text-chalk focus:outline-none"
+            :class="{ 'text-chalk font-bold': activeSection === item.id }"
+            @click.prevent="scrollToSection(item.id)"
+            @mouseenter="playHoverSound"
           >
-            {{ item.label }}
-            <span v-if="activeSection === item.id" class="size-2.5 shrink-0 rounded-full bg-accent"></span>
+            <span>{{ item.label }}</span>
+            <span
+              v-if="activeSection === item.id"
+              class="absolute bottom-0 left-3.5 right-3.5 h-0.5 bg-signal"
+            ></span>
+          </a>
+        </div>
+
+        <!-- Right Side: Sound Toggle + Contact CTA + Mobile Menu Button -->
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <!-- Minimalist Sound Toggle -->
+          <button
+            type="button"
+            class="hidden border border-hairline bg-surface/80 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-silver transition-colors hover:border-signal hover:text-chalk sm:inline-flex items-center gap-1.5 focus:outline-none"
+            @click="toggleSound"
+            @mouseenter="playHoverSound"
+            :aria-label="isSoundEnabled ? 'Mute sound' : 'Enable sound'"
+          >
+            <span class="size-1.5 rounded-full" :class="isSoundEnabled ? 'bg-signal animate-ping' : 'bg-dim'"></span>
+            <span>AUDIO: {{ isSoundEnabled ? 'ON' : 'OFF' }}</span>
+          </button>
+
+          <!-- Contact CTA Desktop -->
+          <a
+            :href="navigation.cta.href"
+            data-magnetic
+            class="hidden border border-hairline-strong bg-surface px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-chalk transition-all duration-300 hover:border-signal hover:bg-signal hover:text-white sm:inline-flex"
+            @click.prevent="scrollToSection('contact')"
+            @mouseenter="playHoverSound"
+          >
+            {{ navigation.cta.label }}
+          </a>
+
+          <!-- Polished Animated Hamburger Button (44px Touch Target) -->
+          <button
+            type="button"
+            class="group flex size-11 items-center justify-center border transition-all duration-300 md:hidden focus:outline-none touch-manipulation active:scale-95"
+            :class="isOpen ? 'border-signal bg-surface-elevated' : 'border-hairline bg-surface hover:border-chalk'"
+            :aria-expanded="isOpen"
+            :aria-label="isOpen ? 'Close navigation menu' : 'Open navigation menu'"
+            aria-controls="mobile-nav-drawer"
+            @click="toggleMenu"
+          >
+            <!-- 3-Line Animated Icon to X Transition -->
+            <div class="relative flex h-3.5 w-5 flex-col justify-between" aria-hidden="true">
+              <!-- Top Bar -->
+              <span
+                class="block h-[1.5px] w-full rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center"
+                :class="isOpen ? 'translate-y-[6px] rotate-45 bg-signal' : 'bg-chalk group-hover:bg-signal'"
+              ></span>
+
+              <!-- Middle Bar -->
+              <span
+                class="block h-[1.5px] w-full rounded-full transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                :class="isOpen ? 'opacity-0 scale-x-0' : 'bg-chalk group-hover:bg-signal'"
+              ></span>
+
+              <!-- Bottom Bar -->
+              <span
+                class="block h-[1.5px] w-full rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center"
+                :class="isOpen ? '-translate-y-[6px] -rotate-45 bg-signal' : 'bg-chalk group-hover:bg-signal'"
+              ></span>
+            </div>
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Mobile Drawer Menu with Solid Opaque Background & Coordinated Entrance -->
+    <Transition name="drawer">
+      <div
+        v-if="isOpen"
+        id="mobile-nav-drawer"
+        class="fixed inset-x-0 top-16 z-40 flex flex-col justify-between bg-[#090a0c] px-6 py-8 border-b border-hairline sm:top-20 h-[calc(100dvh-4rem)] sm:h-[calc(100dvh-5rem)] overflow-y-auto"
+      >
+        <div class="space-y-6">
+          <!-- Top Utility Bar inside Drawer -->
+          <div class="flex items-center justify-between border-b border-hairline/60 pb-3">
+            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-dim">// NAVIGATION DIRECTORY</p>
+            <button
+              type="button"
+              class="font-mono text-[11px] uppercase tracking-wider text-silver flex items-center gap-1.5 transition-colors hover:text-signal"
+              @click="toggleSound"
+            >
+              <span class="size-1.5 rounded-full" :class="isSoundEnabled ? 'bg-signal' : 'bg-dim'"></span>
+              <span>AUDIO: {{ isSoundEnabled ? 'ON' : 'OFF' }}</span>
+            </button>
+          </div>
+
+          <!-- Staggered Navigation Links List -->
+          <div class="divide-y divide-hairline border-b border-hairline">
+            <a
+              v-for="(item, index) in navItems"
+              :key="item.id"
+              :href="`#${item.id}`"
+              class="nav-link-item flex items-center justify-between py-4 text-xl sm:text-2xl font-bold uppercase tracking-tight text-chalk transition-all duration-300 hover:text-signal active:text-signal"
+              :class="{ 'text-signal': activeSection === item.id }"
+              :style="{ transitionDelay: isOpen ? `${index * 40 + 60}ms` : '0ms' }"
+              @click.prevent="scrollToSection(item.id)"
+            >
+              <div class="flex items-center gap-3">
+                <span class="font-mono text-xs text-dim">[0{{ index + 1 }}]</span>
+                <span>{{ item.label }}</span>
+              </div>
+              <span class="font-mono text-xs text-dim transition-transform duration-200 group-hover:translate-x-1">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Bottom Action CTA -->
+        <div class="pt-6">
+          <a
+            :href="navigation.cta.href"
+            class="flex w-full items-center justify-center border border-signal bg-signal py-4 font-mono text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-signal-hover active:bg-signal-hover"
+            @click.prevent="scrollToSection('contact')"
+          >
+            {{ navigation.cta.label }}
           </a>
         </div>
       </div>
-    </div>
+    </Transition>
   </header>
 </template>
+
+<style scoped>
+/* Mobile Drawer Transition */
+.drawer-enter-active {
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-leave-active {
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-enter-from {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.drawer-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.drawer-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.drawer-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* Staggered Navigation Items Reveal */
+.drawer-enter-active .nav-link-item {
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-enter-from .nav-link-item {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer-enter-active,
+  .drawer-leave-active,
+  .drawer-enter-active .nav-link-item {
+    transition: opacity 0.15s ease-in-out !important;
+    transform: none !important;
+  }
+}
+</style>

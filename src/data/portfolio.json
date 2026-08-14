@@ -1,0 +1,209 @@
+{
+  "profile": {
+    "name": "Gavin Naufal Karnedi",
+    "shortName": "Gavin Naufal",
+    "role": "Frontend & Web Developer",
+    "headline": "Building clean, high-performance web applications with precision and modern design.",
+    "location": "Batam, Indonesia",
+    "status": "Available for Projects",
+    "avatar": "@/assets/images/gavin_gtg.jpg",
+    "logo": "@/assets/images/logo-nav.png"
+  },
+  "navigation": {
+    "brand": "Gavin Naufal",
+    "links": [
+      { "id": "about", "label": "About" },
+      { "id": "skills", "label": "Skills" },
+      { "id": "projects", "label": "Projects" },
+      { "id": "education", "label": "Education" },
+      { "id": "contact", "label": "Contact" }
+    ],
+    "cta": {
+      "label": "Let's Talk",
+      "href": "#contact"
+    }
+  },
+  "hero": {
+    "eyebrow": "Frontend & Web Developer",
+    "name": "Gavin Naufal Karnedi",
+    "headline": "Building Modern, High-Performance Web Applications.",
+    "statement": "Siswa Rekayasa Perangkat Lunak di SMKN 7 Batam yang berfokus membangun antarmuka web modern, responsif, dan terstruktur dari konsep desain hingga implementasi kode.",
+    "buttons": {
+      "primary": {
+        "label": "View Projects",
+        "href": "#projects"
+      },
+      "secondary": {
+        "label": "Contact Me",
+        "href": "#contact"
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "About Me",
+    "title": "Philosophy & Background",
+    "summary": "Saya adalah seorang siswa kelas 12 jurusan Rekayasa Perangkat Lunak di SMK Negeri 7 Batam yang berfokus pada web development modern.",
+    "paragraphs": [
+      "Saya adalah seorang siswa kelas 11 jurusan Rekayasa Perangkat Lunak di SMK Negeri 7 Batam yang memiliki minat besar dalam teknologi web modern.",
+      "Berpengalaman membangun website responsif dengan kombinasi front-end modern, back-end yang efisien, dan prinsip desain antarmuka yang intuitif."
+    ],
+    "stats": [
+      { "value": "14+", "label": "Core Skills", "sub": "Frontend, Backend & UI" },
+      { "value": "04", "label": "Featured Projects", "sub": "Web Apps & Platforms" },
+      { "value": "2026", "label": "Focus Year", "sub": "Active Development" }
+    ],
+    "highlights": [
+      {
+        "title": "Full Lifecycle Engineering",
+        "description": "Membangun alur website terstruktur dari konsep UI/UX, slicing responsif, hingga integrasi database yang fungsional."
+      },
+      {
+        "title": "Clean & Responsive Design",
+        "description": "Mengutamakan visual yang bersih, hierarki tipografi yang kuat, dan interaksi yang mulus di seluruh ukuran layar."
+      }
+    ]
+  },
+  "skills": {
+    "eyebrow": "Skills & Technologies",
+    "title": "Tools for Modern Web Development.",
+    "description": "Kombinasi front-end, back-end, database, dan tools desain untuk membangun aplikasi web yang cepat, responsif, dan siap dikembangkan.",
+    "items": [
+      { "name": "Vue.js", "icon": "logos:vue", "category": "Frontend", "level": "Composition API" },
+      { "name": "Angular", "icon": "logos:angular-icon", "category": "Frontend", "level": "TypeScript & SPA" },
+      { "name": "JavaScript", "icon": "logos:javascript", "category": "Frontend", "level": "Core ES6+" },
+      { "name": "HTML5", "icon": "logos:html-5", "category": "Frontend", "level": "Semantic & SEO" },
+      { "name": "CSS3", "icon": "logos:css-3", "category": "Frontend", "level": "Styling & Flex/Grid" },
+      { "name": "Tailwind CSS", "icon": "logos:tailwindcss-icon", "category": "Frontend", "level": "Utility CSS" },
+      { "name": "Laravel", "icon": "logos:laravel", "category": "Backend", "level": "Fullstack PHP" },
+      { "name": "Node.js", "icon": "logos:nodejs-icon", "category": "Backend", "level": "Runtime & API" },
+      { "name": "MySQL", "icon": "logos:mysql-icon", "category": "Database", "level": "Relational DB" },
+      { "name": "Git & GitHub", "icon": "logos:git-icon", "category": "Tools", "level": "Version Control" },
+      { "name": "Vercel", "icon": "logos:vercel-icon", "category": "Tools", "level": "Deployment" },
+      { "name": "Figma", "icon": "logos:figma", "category": "Design", "level": "UI Wireframe" },
+      { "name": "Responsive Design", "icon": "mdi:responsive", "category": "Frontend", "level": "Mobile-First" },
+      { "name": "UI/UX Design", "icon": "mdi:palette-outline", "category": "Design", "level": "User Experience" }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Selected Projects",
+    "title": "Featured Works with High Detail.",
+    "description": "Koleksi project yang pernah saya kembangkan dengan fokus pada kualitas, fungsionalitas, dan desain yang modern.",
+    "items": [
+      {
+        "id": "01",
+        "name": "Website Pengaduan Sekolah",
+        "subtitle": "Digital Complaint Management System",
+        "description": "Website yang bertujuan agar siswa bisa membuat pengaduan dengan cepat, terarah, dan efisien untuk kebutuhan sekolah.",
+        "stack": ["HTML", "CSS", "JavaScript", "Laravel"],
+        "category": "Web Application",
+        "year": "2024",
+        "featured": true,
+        "liveUrl": "https://example.com/school-complaint",
+        "githubUrl": "https://github.com/username/website-pengaduan-sekolah",
+        "image": "/projects/pengaduan-sekolah.png"
+      },
+      {
+        "id": "02",
+        "name": "Website Sistem Absen RFID",
+        "subtitle": "IoT & Attendance Dashboard",
+        "description": "Website untuk pengelolaan data absensi menggunakan kartu RFID. Data absensi terekam dan tersimpan otomatis ke dalam sistem database.",
+        "stack": ["HTML", "CSS", "JavaScript", "C++"],
+        "category": "IoT & Web System",
+        "year": "2024",
+        "featured": false,
+        "liveUrl": "https://example.com/rfid-attendance",
+        "githubUrl": "https://github.com/username/website-absen-rfid",
+        "image": "/projects/sistem-absen-rfid.png"
+      },
+      {
+        "id": "03",
+        "name": "Personal Portfolio Website",
+        "subtitle": "Modern Editorial Portfolio",
+        "description": "Website portfolio modern dengan desain clean editorial, animasi smooth, dan interaksi yang responsif.",
+        "stack": ["Vue.js", "Tailwind CSS", "Vercel"],
+        "category": "Frontend Experience",
+        "year": "2026",
+        "featured": false,
+        "liveUrl": "https://gavinnaufal-dev-portofolio.vercel.app/",
+        "githubUrl": "https://github.com/Gavinnaufal/gavinnaufal-dev-portofolio",
+        "image": "/projects/portofolio-web.png"
+      },
+      {
+        "id": "04",
+        "name": "Website Pemesanan Dimsum PJS",
+        "subtitle": "E-Commerce Online Order Platform",
+        "description": "Website kolaborasi SMKN 7 Batam bersama Dimsum PJS yang menyediakan sistem pemesanan menu online secara praktis bagi pembeli.",
+        "stack": ["HTML", "CSS", "JavaScript"],
+        "category": "E-Commerce",
+        "year": "2024",
+        "featured": true,
+        "liveUrl": "https://dimsumpjs-skaju.vercel.app/",
+        "githubUrl": "https://github.com/Gavinnaufal/dimsumpjs-skaju",
+        "image": "/projects/dimsum-pjs.png"
+      }
+    ]
+  },
+  "education": {
+    "eyebrow": "Education",
+    "title": "Academic Journey.",
+    "description": "Perjalanan pendidikan yang membangun fondasi teknis dan minat saya di dunia pemrograman.",
+    "items": [
+      {
+        "id": "01",
+        "title": "SMK Negeri 7 Batam",
+        "subtitle": "Sekolah Menengah Kejuruan — Rekayasa Perangkat Lunak",
+        "period": "2024 — Sekarang",
+        "active": true,
+        "items": [
+          "Mempelajari web development, database, UI/UX, dan rekayasa perangkat lunak.",
+          "Membuat berbagai project website menggunakan HTML, CSS, JavaScript, Vue.js, Laravel, dan MySQL.",
+          "Mengembangkan kemampuan problem solving, kolaborasi tim, dan logika algoritma.",
+          "Fokus membangun website yang responsif, modern, dan mudah digunakan."
+        ]
+      },
+      {
+        "id": "02",
+        "title": "SMP Negeri 6 Batam",
+        "subtitle": "Sekolah Menengah Pertama",
+        "period": "2021 — 2024",
+        "active": false,
+        "items": [
+          "Membangun dasar akademik dan minat awal dalam teknologi informasi.",
+          "Aktif mengikuti pembelajaran dan kegiatan sekolah.",
+          "Mengembangkan kemampuan komunikasi, kedisiplinan, dan kerja sama tim."
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "heading": "Let's Work Together.",
+    "description": "Tertarik untuk berkolaborasi dalam project web, magang, atau project lepas? Jangan ragu untuk menghubungi saya melalui kontak di bawah ini.",
+    "status": "Terbuka untuk peluang kolaborasi & project baru",
+    "items": [
+      {
+        "label": "GitHub",
+        "value": "github.com/gavinnaufal",
+        "href": "https://github.com/gavinnaufal",
+        "desc": "Koleksi project & repository kode"
+      },
+      {
+        "label": "Instagram",
+        "value": "@gavinnaufall_",
+        "href": "https://instagram.com/gavinnaufall_",
+        "desc": "Aktivitas & update sosial media"
+      },
+      {
+        "label": "LinkedIn",
+        "value": "linkedin.com/in/gavin-naufal-karnedi-841080330/",
+        "href": "https://www.linkedin.com/in/gavin-naufal-karnedi-841080330/",
+        "desc": "Koneksi profesional & jejaring"
+      }
+    ]
+  },
+  "footer": {
+    "brand": "Gavin Naufal Karnedi",
+    "copyright": "© 2026 Gavin Naufal Karnedi. All rights reserved.",
+    "colophon": "Built with Vue 3, Tailwind CSS, GSAP, and Lenis."
+  }
+}
