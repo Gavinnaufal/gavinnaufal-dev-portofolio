@@ -10,9 +10,17 @@ const preloaderEl = ref(null)
 const curtainTop = ref(null)
 const curtainBottom = ref(null)
 const contentEl = ref(null)
-const statusText = ref('INITIALIZING SYSTEMS')
+const statusText = ref('SYSTEM INITIALIZING')
 
 onMounted(() => {
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (isReducedMotion) {
+    isFinished.value = true
+    emit('complete')
+    return
+  }
+
   const tl = gsap.timeline({
     onComplete: () => {
       isFinished.value = true
@@ -20,45 +28,58 @@ onMounted(() => {
     },
   })
 
-  // 1. Counter ticker animation
-  const counterObj = { val: 0 }
-  tl.to(counterObj, {
-    val: 100,
-    duration: 1.3,
-    ease: 'power2.inOut',
-    onUpdate: () => {
-      counter.value = Math.floor(counterObj.val)
-      if (counter.value > 30 && counter.value < 70) {
-        statusText.value = 'LOADING REPOSITORIES'
-      } else if (counter.value >= 70) {
-        statusText.value = 'READY // SYSTEM ONLINE'
-      }
-    },
-  })
+  // 1. Initial content entrance (crisp, immediate)
+  tl.fromTo(
+    contentEl.value,
+    { opacity: 0, y: 8 },
+    { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
+  )
 
-  // 2. Fade out text content
+  // 2. Counter ticker animation (1.05s natural acceleration-deceleration curve)
+  const counterObj = { val: 0 }
+  tl.to(
+    counterObj,
+    {
+      val: 100,
+      duration: 1.1,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        counter.value = Math.floor(counterObj.val)
+        if (counter.value < 45) {
+          statusText.value = 'SYSTEM INITIALIZING'
+        } else if (counter.value >= 45 && counter.value < 85) {
+          statusText.value = 'LOADING ARCHIVE'
+        } else {
+          statusText.value = 'SYSTEM ONLINE'
+        }
+      },
+    },
+    '-=0.1'
+  )
+
+  // 3. Decisive confirmation hold (100ms) followed by text fade out
   tl.to(contentEl.value, {
     opacity: 0,
-    y: -20,
-    duration: 0.35,
+    y: -12,
+    duration: 0.28,
     ease: 'power3.in',
-  })
+  }, '+=0.1')
 
-  // 3. Cinematic Curtain Split opening
+  // 4. Cinematic Heavy Curtain Split (0.8s, power4.inOut)
   tl.to(
     curtainTop.value,
     {
       yPercent: -100,
-      duration: 0.85,
+      duration: 0.8,
       ease: 'power4.inOut',
     },
-    '-=0.1'
+    '-=0.06'
   )
   tl.to(
     curtainBottom.value,
     {
       yPercent: 100,
-      duration: 0.85,
+      duration: 0.8,
       ease: 'power4.inOut',
     },
     '<'
@@ -70,7 +91,7 @@ onMounted(() => {
   <div
     v-if="!isFinished"
     ref="preloaderEl"
-    class="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden pointer-events-auto"
+    class="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden pointer-events-auto bg-[#090a0c]"
   >
     <!-- Top Curtain -->
     <div

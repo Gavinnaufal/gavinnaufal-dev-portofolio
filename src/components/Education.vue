@@ -32,7 +32,7 @@ const { education } = portfolioData
             >
               <!-- Timeline Dot Marker (Mathematically centered on border line) -->
               <span
-                class="absolute -left-[7px] top-1.5 size-3 rounded-full border border-[#090a0c] bg-surface-muted ring-4 ring-[#090a0c] transition-all duration-300 group-hover:scale-125 group-hover:bg-signal"
+                class="absolute -left-[7px] top-1.5 size-3 rounded-full border border-[#090a0c] bg-surface-muted ring-4 ring-[#090a0c] transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:bg-signal"
                 :class="item.active ? 'bg-signal' : 'bg-surface-muted'"
               ></span>
 

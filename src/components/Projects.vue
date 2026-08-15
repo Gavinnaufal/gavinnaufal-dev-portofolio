@@ -33,8 +33,13 @@ const { projects } = portfolioData
           data-reveal-item
         >
           <!-- Media Column (7 Cols on LG) -->
-          <div
-            class="relative overflow-hidden border border-hairline-strong bg-surface transition-colors duration-500 hover:border-signal/70 lg:col-span-7 w-full"
+          <component
+            :is="project.liveUrl ? 'a' : 'div'"
+            :href="project.liveUrl || undefined"
+            :target="project.liveUrl ? '_blank' : undefined"
+            :rel="project.liveUrl ? 'noreferrer' : undefined"
+            :data-cursor="project.liveUrl ? 'view' : undefined"
+            class="relative block overflow-hidden border border-hairline-strong bg-surface transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal/70 lg:col-span-7 w-full"
             :class="index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'"
           >
             <!-- Top Bar inside frame -->
@@ -51,11 +56,11 @@ const { projects } = portfolioData
               <img
                 :src="project.image"
                 :alt="`Preview of ${project.name}`"
-                class="h-full w-full object-cover grayscale contrast-110 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:grayscale-0"
+                class="h-full w-full object-cover grayscale contrast-110 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03] group-hover:grayscale-0"
                 loading="lazy"
               />
             </div>
-          </div>
+          </component>
 
           <!-- Narrative & Specs Column (5 Cols on LG) -->
           <div
@@ -66,7 +71,7 @@ const { projects } = portfolioData
               <span class="font-mono text-xs uppercase tracking-widest text-signal">
                 PROJECT // {{ String(index + 1).padStart(2, '0') }}
               </span>
-              <h3 class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-chalk break-words">
+              <h3 class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-chalk transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:text-signal break-words">
                 {{ project.name }}
               </h3>
               <p v-if="project.subtitle" class="font-mono text-xs uppercase tracking-wider text-dim">
@@ -85,7 +90,7 @@ const { projects } = portfolioData
                 <span
                   v-for="tech in project.stack"
                   :key="tech"
-                  class="border border-hairline bg-surface px-2 sm:px-2.5 py-1 font-mono text-[11px] sm:text-xs text-chalk"
+                  class="border border-hairline bg-surface px-2 sm:px-2.5 py-1 font-mono text-[11px] sm:text-xs text-chalk transition-colors duration-200 hover:border-signal/40"
                 >
                   {{ tech }}
                 </span>
@@ -133,7 +138,7 @@ const { projects } = portfolioData
             <div
               v-for="(item, idx) in projects.items"
               :key="item.name"
-              class="group flex flex-col gap-2 p-4 transition-colors hover:bg-surface-elevated sm:grid sm:grid-cols-12 sm:items-center sm:gap-0 sm:px-6"
+              class="group flex flex-col gap-2 p-4 transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-surface-elevated sm:grid sm:grid-cols-12 sm:items-center sm:gap-0 sm:px-6"
             >
               <div class="text-dim group-hover:text-signal sm:col-span-1">
                 {{ String(idx + 1).padStart(2, '0') }}
@@ -150,7 +155,7 @@ const { projects } = portfolioData
                   :href="item.liveUrl"
                   target="_blank"
                   rel="noreferrer"
-                  class="text-chalk underline decoration-hairline transition-colors hover:decoration-signal text-xs"
+                  class="text-chalk underline decoration-hairline transition-colors duration-200 hover:text-signal hover:decoration-signal text-xs"
                 >
                   LIVE ↗
                 </a>
@@ -159,7 +164,7 @@ const { projects } = portfolioData
                   :href="item.githubUrl"
                   target="_blank"
                   rel="noreferrer"
-                  class="text-dim transition-colors hover:text-chalk text-xs"
+                  class="text-dim transition-colors duration-200 hover:text-chalk text-xs"
                 >
                   CODE ↗
                 </a>

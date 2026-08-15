@@ -2,58 +2,57 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import gsap from 'gsap'
 
-const cursorDot = ref(null)
-const cursorRing = ref(null)
-const cursorText = ref('')
-const isHovering = ref(false)
-const isViewing = ref(false)
+const cursorWrap = ref(null)
 const isVisible = ref(false)
+const isHovering = ref(false)
+const isViewingProject = ref(false)
+const isPressed = ref(false)
 
 let mouseMoveHandler = null
 let mouseLeaveHandler = null
 let mouseEnterHandler = null
-let clickHandler = null
+let mouseDownHandler = null
+let mouseUpHandler = null
 
 onMounted(() => {
-  // Only enable on pointer-capable non-touch devices
-  if (!window.matchMedia('(pointer: fine)').matches) return
+  // Only enable on desktop pointer-capable devices with hover support
+  const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const dot = cursorDot.value
-  const ring = cursorRing.value
-  if (!dot || !ring) return
+  if (!isFinePointer) return
 
-  // High performance GSAP quickTo setters
-  const setDotX = gsap.quickTo(dot, 'x', { duration: 0.05, ease: 'power2.out' })
-  const setDotY = gsap.quickTo(dot, 'y', { duration: 0.05, ease: 'power2.out' })
-  const setRingX = gsap.quickTo(ring, 'x', { duration: 0.18, ease: 'power2.out' })
-  const setRingY = gsap.quickTo(ring, 'y', { duration: 0.18, ease: 'power2.out' })
+  // Add active class to root element so custom cursor styles apply only when supported
+  document.documentElement.classList.add('has-custom-cursor')
+
+  const wrap = cursorWrap.value
+  if (!wrap) return
+
+  // High performance GSAP quickTo setters on GPU transforms
+  const setX = gsap.quickTo(wrap, 'x', { duration: isReducedMotion ? 0.01 : 0.08, ease: 'power2.out' })
+  const setY = gsap.quickTo(wrap, 'y', { duration: isReducedMotion ? 0.01 : 0.08, ease: 'power2.out' })
 
   mouseMoveHandler = (e) => {
     isVisible.value = true
     const { clientX, clientY, target } = e
 
-    setDotX(clientX)
-    setDotY(clientY)
-    setRingX(clientX)
-    setRingY(clientY)
+    setX(clientX)
+    setY(clientY)
 
-    // Check hovered elements for context-aware cursor
-    const interactiveTarget = target.closest('a, button, [data-magnetic], [data-cursor], .project-row')
-    if (interactiveTarget) {
-      const cursorMode = interactiveTarget.getAttribute('data-cursor')
-      if (cursorMode === 'view' || interactiveTarget.classList.contains('project-row')) {
-        isViewing.value = true
-        isHovering.value = false
-        cursorText.value = 'VIEW ↗'
-      } else {
-        isHovering.value = true
-        isViewing.value = false
-        cursorText.value = ''
-      }
+    if (!target) return
+
+    // Context-aware interaction detection
+    const projectTarget = target.closest('.project-row, [data-cursor="view"]')
+    const interactiveTarget = target.closest('a, button, [role="button"], [data-magnetic], input, select, textarea, .nav-link-item')
+
+    if (projectTarget) {
+      isViewingProject.value = true
+      isHovering.value = false
+    } else if (interactiveTarget) {
+      isHovering.value = true
+      isViewingProject.value = false
     } else {
       isHovering.value = false
-      isViewing.value = false
-      cursorText.value = ''
+      isViewingProject.value = false
     }
   }
 
@@ -65,54 +64,84 @@ onMounted(() => {
     isVisible.value = true
   }
 
-  clickHandler = () => {
-    if (ring) {
-      gsap.fromTo(ring, { scale: 0.75 }, { scale: 1, duration: 0.25, ease: 'power2.out' })
-    }
+  mouseDownHandler = () => {
+    isPressed.value = true
+  }
+
+  mouseUpHandler = () => {
+    isPressed.value = false
   }
 
   window.addEventListener('mousemove', mouseMoveHandler, { passive: true })
-  window.addEventListener('mouseleave', mouseLeaveHandler, { passive: true })
-  window.addEventListener('mouseenter', mouseEnterHandler, { passive: true })
-  window.addEventListener('mousedown', clickHandler, { passive: true })
+  document.addEventListener('mouseleave', mouseLeaveHandler, { passive: true })
+  document.addEventListener('mouseenter', mouseEnterHandler, { passive: true })
+  window.addEventListener('mousedown', mouseDownHandler, { passive: true })
+  window.addEventListener('mouseup', mouseUpHandler, { passive: true })
 })
 
 onBeforeUnmount(() => {
+  document.documentElement.classList.remove('has-custom-cursor')
   if (mouseMoveHandler) window.removeEventListener('mousemove', mouseMoveHandler)
-  if (mouseLeaveHandler) window.removeEventListener('mouseleave', mouseLeaveHandler)
-  if (mouseEnterHandler) window.removeEventListener('mouseenter', mouseEnterHandler)
-  if (clickHandler) window.removeEventListener('mousedown', clickHandler)
+  if (mouseLeaveHandler) document.removeEventListener('mouseleave', mouseLeaveHandler)
+  if (mouseEnterHandler) document.removeEventListener('mouseenter', mouseEnterHandler)
+  if (mouseDownHandler) window.removeEventListener('mousedown', mouseDownHandler)
+  if (mouseUpHandler) window.removeEventListener('mouseup', mouseUpHandler)
 })
 </script>
 
 <template>
   <div
-    class="pointer-events-none fixed inset-0 z-[999] overflow-hidden hidden md:block"
+    ref="cursorWrap"
+    class="pointer-events-none fixed top-0 left-0 z-[80] -translate-x-1/2 -translate-y-1/2 will-change-transform hidden md:block"
     :class="{ 'opacity-100': isVisible, 'opacity-0': !isVisible }"
+    style="transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);"
     aria-hidden="true"
   >
-    <!-- Micro Center Dot -->
+    <!-- State 01: Default Micro Dot (•) -->
     <div
-      ref="cursorDot"
-      class="fixed -top-1 -left-1 size-2 rounded-full bg-signal transition-opacity duration-200 will-change-transform"
-      :class="{ 'opacity-0 scale-0': isViewing || isHovering, 'opacity-100 scale-100': !isViewing && !isHovering }"
+      v-if="!isHovering && !isViewingProject"
+      class="size-2 rounded-full bg-chalk shadow-[0_0_8px_rgba(255,255,255,0.4)] transition-transform duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      :class="{ 'scale-50': isPressed, 'scale-100': !isPressed }"
     ></div>
 
-    <!-- Smooth Follower Ring / Pill -->
+    <!-- State 02: Interactive Link / Button Hover (◯) -->
     <div
-      ref="cursorRing"
-      class="fixed -top-4 -left-4 flex items-center justify-center rounded-full transition-all duration-300 ease-out will-change-transform"
-      :class="[
-        isViewing
-          ? 'size-20 -top-10 -left-10 bg-signal text-white font-mono text-[10px] font-bold shadow-xl scale-100'
-          : isHovering
-            ? 'size-12 -top-6 -left-6 border-2 border-signal bg-signal/15 backdrop-blur-[1px] scale-100'
-            : 'size-8 border border-white/40 bg-transparent scale-100',
-      ]"
+      v-else-if="isHovering && !isViewingProject"
+      class="flex size-6 items-center justify-center rounded-full border border-signal bg-signal/10 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] backdrop-blur-[0.5px]"
+      :class="{ 'scale-75': isPressed, 'scale-100': !isPressed }"
     >
-      <span v-if="isViewing" class="tracking-wider uppercase animate-pulse">
-        {{ cursorText }}
-      </span>
+      <span class="size-1 rounded-full bg-signal"></span>
+    </div>
+
+    <!-- State 03: Project Hover Compact Badge [ VIEW ↗ ] -->
+    <div
+      v-else-if="isViewingProject"
+      class="flex items-center gap-1.5 border border-signal/80 bg-[#090a0c]/90 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-chalk shadow-lg transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] backdrop-blur-sm"
+      :class="{ 'scale-90': isPressed, 'scale-100': !isPressed }"
+    >
+      <span class="size-1 rounded-full bg-signal animate-pulse"></span>
+      <span>VIEW</span>
+      <span class="text-signal text-[11px]">↗</span>
     </div>
   </div>
 </template>
+
+<style>
+/* Hide native cursor ONLY on devices supporting custom cursor */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor [role="button"] {
+    cursor: none !important;
+  }
+
+  html.has-custom-cursor input,
+  html.has-custom-cursor textarea,
+  html.has-custom-cursor select {
+    cursor: auto !important;
+  }
+}
+</style>
+

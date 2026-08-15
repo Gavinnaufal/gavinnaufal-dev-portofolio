@@ -10,6 +10,14 @@
     --chalk: #f4f4f0;
     --silver: #9b9da4;
     --signal: #ff3b00;
+
+    /* Motion Tokens */
+    --ease-ui: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+    --dur-micro: 140ms;
+    --dur-quick: 220ms;
+    --dur-std: 320ms;
+    --dur-cinema: 750ms;
   }
 
   * {
@@ -113,18 +121,18 @@
     @apply absolute -inset-1 rounded-full bg-signal/40 animate-ping;
   }
 
-  /* Action Buttons (Architectural Swiss Style) */
+  /* Action Buttons (Architectural Swiss Style with Tactile UI Easing) */
   .btn-editorial-primary {
-    @apply inline-flex items-center justify-between gap-4 bg-chalk px-6 py-4 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-canvas transition-all duration-300 hover:bg-signal hover:text-white;
+    @apply inline-flex items-center justify-between gap-4 bg-chalk px-6 py-4 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-canvas transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-signal hover:text-white active:scale-[0.98];
   }
 
   .btn-editorial-secondary {
-    @apply inline-flex items-center justify-between gap-4 border border-hairline-strong bg-transparent px-6 py-4 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-chalk transition-all duration-300 hover:border-chalk hover:bg-white/5;
+    @apply inline-flex items-center justify-between gap-4 border border-hairline-strong bg-transparent px-6 py-4 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-chalk transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-chalk hover:bg-white/5 active:scale-[0.98];
   }
 
-  /* Interactive Arrow */
+  /* Interactive Arrow with Refined Motion */
   .arrow-reveal {
-    @apply inline-block transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1;
+    @apply inline-block transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-1;
   }
 
   /* Editorial Section Title */
@@ -141,22 +149,7 @@
   }
 }
 
-/* Text Mask Reveal animation styles */
-.mask-line {
-  overflow: hidden;
-  display: block;
-}
-
-.mask-inner {
-  display: block;
-  transform: translateY(110%);
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.is-visible .mask-inner {
-  transform: translateY(0%);
-}
-
+/* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

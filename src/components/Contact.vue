@@ -45,11 +45,11 @@ const { contact } = portfolioData
               :href="item.href"
               target="_blank"
               rel="noreferrer"
-              class="group flex items-center justify-between p-4 sm:p-5 transition-colors hover:bg-surface-elevated gap-3"
+              class="group flex items-center justify-between p-4 sm:p-5 transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-surface-elevated gap-3"
             >
               <div class="space-y-1 min-w-0 flex-1">
                 <span class="text-[10px] uppercase tracking-widest text-dim block">// {{ item.label }}</span>
-                <p class="font-sans text-base sm:text-lg lg:text-xl font-bold text-chalk transition-colors group-hover:text-signal break-all">
+                <p class="font-sans text-base sm:text-lg lg:text-xl font-bold text-chalk transition-colors duration-200 group-hover:text-signal break-all">
                   {{ item.value }}
                 </p>
                 <p v-if="item.desc" class="text-xs text-silver">
@@ -57,7 +57,7 @@ const { contact } = portfolioData
                 </p>
               </div>
 
-              <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center border border-hairline bg-surface text-chalk transition-all duration-300 group-hover:border-signal group-hover:bg-signal group-hover:text-white">
+              <div class="flex size-8 sm:size-9 shrink-0 items-center justify-center border border-hairline bg-surface text-chalk transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:border-signal group-hover:bg-signal group-hover:text-white">
                 <span class="arrow-reveal text-sm">↗</span>
               </div>
             </a>

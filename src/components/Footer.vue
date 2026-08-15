@@ -50,11 +50,11 @@ const scrollToTop = () => {
           <p class="text-[10px] uppercase tracking-widest text-dim">// RETURN</p>
           <button
             type="button"
-            class="group inline-flex items-center gap-2 border border-hairline bg-surface px-3.5 py-2 text-xs text-chalk transition-colors hover:border-signal hover:text-signal focus:outline-none"
+            class="group inline-flex items-center gap-2 border border-hairline bg-surface px-3.5 py-2 text-xs text-chalk transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal hover:text-signal active:scale-95 focus:outline-none"
             @click="scrollToTop"
           >
             <span>BACK TO TOP</span>
-            <span class="transition-transform group-hover:-translate-y-0.5">↑</span>
+            <span class="transition-transform duration-200 group-hover:-translate-y-0.5">↑</span>
           </button>
         </div>
       </div>

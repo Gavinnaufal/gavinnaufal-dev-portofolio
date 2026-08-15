@@ -40,7 +40,7 @@ const paragraphs = about.paragraphs || [about.summary]
             <div
               v-for="stat in about.stats"
               :key="stat.label"
-              class="p-4 sm:p-6 transition-colors duration-300 hover:bg-surface"
+              class="p-4 sm:p-6 transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-surface"
             >
               <p class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-chalk">
                 {{ stat.value }}
@@ -62,7 +62,7 @@ const paragraphs = about.paragraphs || [about.summary]
             <div
               v-for="(item, index) in about.highlights"
               :key="item.title"
-              class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 py-4 sm:py-6 transition-colors duration-300 hover:bg-surface/60 sm:items-start"
+              class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 py-4 sm:py-6 transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-surface/60 sm:items-start"
             >
               <div class="sm:col-span-4">
                 <span class="font-mono text-xs uppercase tracking-widest text-signal">

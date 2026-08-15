@@ -13,6 +13,8 @@ onMounted(() => {
   if (!canvas) return
   const ctx = canvas.getContext('2d', { alpha: true })
 
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   let width = (canvas.width = window.innerWidth)
   let height = (canvas.height = window.innerHeight)
   let dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -25,21 +27,46 @@ onMounted(() => {
   const mouse = {
     x: -9999,
     y: -9999,
-    radius: 140,
+    radius: 120,
     isActive: false,
   }
 
-  // Scroll velocity tracking
+  // Scroll tracking & Section Intensity State Machine
   let lastScrollY = window.scrollY
   let scrollVelocity = 0
   let scrollImpulse = 0
+  let currentIntensity = 0.85
+  let targetIntensity = 0.85
+
+  const sectionIntensities = {
+    home: 0.85,
+    about: 0.35,
+    skills: 0.20,
+    projects: 0.70,
+    education: 0.30,
+    contact: 0.18,
+  }
+
+  const updateSectionIntensity = () => {
+    const scrollPos = window.scrollY + window.innerHeight * 0.35
+    const sections = ['home', 'about', 'skills', 'projects', 'education', 'contact']
+    
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const el = document.getElementById(sections[i])
+      if (el && el.offsetTop <= scrollPos) {
+        targetIntensity = sectionIntensities[sections[i]] || 0.4
+        break
+      }
+    }
+  }
 
   scrollHandler = () => {
     const currentScrollY = window.scrollY
     const delta = currentScrollY - lastScrollY
     scrollVelocity = delta
-    scrollImpulse = Math.max(-18, Math.min(18, delta * 0.4))
+    scrollImpulse = Math.max(-12, Math.min(12, delta * 0.3))
     lastScrollY = currentScrollY
+    updateSectionIntensity()
   }
   window.addEventListener('scroll', scrollHandler, { passive: true })
 
@@ -64,23 +91,23 @@ onMounted(() => {
       this.y = Math.random() * height
       this.originX = this.x
       this.originY = this.y
-      this.size = Math.random() * 2 + 1.2 // 1.2px - 3.2px
-      this.vx = (Math.random() - 0.5) * 0.45
-      this.vy = (Math.random() - 0.5) * 0.45
-      this.density = Math.random() * 20 + 8
-      this.isSignal = Math.random() < 0.18 // ~18% signal orange accent
-      this.baseAlpha = Math.random() * 0.45 + 0.3
+      this.size = Math.random() * 1.6 + 1.0 // 1.0px - 2.6px
+      this.vx = (Math.random() - 0.5) * 0.35
+      this.vy = (Math.random() - 0.5) * 0.35
+      this.density = Math.random() * 16 + 6
+      this.isSignal = Math.random() < 0.16 // ~16% signal orange accent
+      this.baseAlpha = Math.random() * 0.35 + 0.2
       this.alpha = this.baseAlpha
     }
 
-    update() {
+    update(globalIntensity) {
       // Natural float drift
-      this.x += this.vx
-      this.y += this.vy
+      this.x += this.vx * globalIntensity
+      this.y += this.vy * globalIntensity
 
       // Apply scroll kinetic impulse
       if (Math.abs(scrollImpulse) > 0.05) {
-        this.y -= scrollImpulse * (this.size * 0.4)
+        this.y -= scrollImpulse * (this.size * 0.3)
       }
 
       // Mouse repulsion wave physics
@@ -94,17 +121,17 @@ onMounted(() => {
           const forceDirectionY = dy / distance
           const maxDistance = mouse.radius
           const force = (maxDistance - distance) / maxDistance
-          const directionX = forceDirectionX * force * this.density * 0.6
-          const directionY = forceDirectionY * force * this.density * 0.6
+          const directionX = forceDirectionX * force * this.density * 0.5
+          const directionY = forceDirectionY * force * this.density * 0.5
 
           this.x -= directionX
           this.y -= directionY
-          this.alpha = Math.min(0.9, this.baseAlpha + force * 0.4)
+          this.alpha = Math.min(0.85, (this.baseAlpha + force * 0.35) * globalIntensity)
         } else {
-          this.alpha += (this.baseAlpha - this.alpha) * 0.05
+          this.alpha += (this.baseAlpha * globalIntensity - this.alpha) * 0.05
         }
       } else {
-        this.alpha += (this.baseAlpha - this.alpha) * 0.05
+        this.alpha += (this.baseAlpha * globalIntensity - this.alpha) * 0.05
       }
 
       // Wrap around viewport edges smoothly
@@ -119,27 +146,24 @@ onMounted(() => {
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
       if (this.isSignal) {
         ctx.fillStyle = `rgba(255, 59, 0, ${this.alpha})`
-        ctx.shadowColor = '#ff3b00'
-        ctx.shadowBlur = 6
       } else {
         ctx.fillStyle = `rgba(244, 244, 240, ${this.alpha})`
-        ctx.shadowBlur = 0
       }
       ctx.fill()
-      ctx.shadowBlur = 0
     }
   }
 
-  // Generate 75 Particles
-  const particleCount = Math.min(85, Math.floor((width * height) / 14000))
+  // Generate restrained Particle Count (48 on Desktop, 22 on Mobile)
+  const isMobile = width < 768
+  const particleCount = isMobile ? 22 : 48
   const particles = []
   for (let i = 0; i < particleCount; i++) {
     particles.push(new Particle())
   }
 
   // Draw constellation connection lines
-  const connectParticles = () => {
-    const maxDist = 115
+  const connectParticles = (globalIntensity) => {
+    const maxDist = isMobile ? 85 : 110
     for (let a = 0; a < particles.length; a++) {
       for (let b = a + 1; b < particles.length; b++) {
         const dx = particles[a].x - particles[b].x
@@ -147,38 +171,48 @@ onMounted(() => {
         const dist = Math.hypot(dx, dy)
 
         if (dist < maxDist) {
-          const lineAlpha = (1 - dist / maxDist) * 0.14
+          const lineAlpha = (1 - dist / maxDist) * 0.11 * globalIntensity
           ctx.beginPath()
           ctx.moveTo(particles[a].x, particles[a].y)
           ctx.lineTo(particles[b].x, particles[b].y)
 
           if (particles[a].isSignal || particles[b].isSignal) {
-            ctx.strokeStyle = `rgba(255, 59, 0, ${lineAlpha * 1.3})`
+            ctx.strokeStyle = `rgba(255, 59, 0, ${lineAlpha * 1.2})`
           } else {
             ctx.strokeStyle = `rgba(244, 244, 240, ${lineAlpha})`
           }
-          ctx.lineWidth = 0.75
+          ctx.lineWidth = 0.65
           ctx.stroke()
         }
       }
     }
   }
 
+  // If reduced motion, draw once and return
+  if (isReducedMotion) {
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].draw()
+    }
+    connectParticles(0.4)
+    return
+  }
+
   // 60FPS Render Loop
   const render = () => {
     ctx.clearRect(0, 0, width, height)
 
-    // Damping scroll impulse
-    scrollImpulse *= 0.92
+    // Smooth intensity interpolation
+    currentIntensity += (targetIntensity - currentIntensity) * 0.04
+    scrollImpulse *= 0.90
 
     // Update & draw particles
     for (let i = 0; i < particles.length; i++) {
-      particles[i].update()
+      particles[i].update(currentIntensity)
       particles[i].draw()
     }
 
     // Connect constellation
-    connectParticles()
+    connectParticles(currentIntensity)
 
     animationFrameId = requestAnimationFrame(render)
   }

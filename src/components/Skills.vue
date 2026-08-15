@@ -75,7 +75,7 @@ const filteredSkills = computed(() => {
           <div
             v-for="(skill, index) in filteredSkills"
             :key="skill.name"
-            class="group flex flex-col gap-2 p-3.5 sm:grid sm:grid-cols-12 sm:items-center sm:gap-0 sm:px-6 sm:py-4 transition-colors duration-200 hover:bg-surface-elevated"
+            class="group flex flex-col gap-2 p-3.5 sm:grid sm:grid-cols-12 sm:items-center sm:gap-0 sm:px-6 sm:py-4 transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-surface-elevated"
           >
             <!-- Index -->
             <div class="text-[11px] sm:text-xs text-dim group-hover:text-signal sm:col-span-1">
@@ -84,11 +84,11 @@ const filteredSkills = computed(() => {
 
             <!-- Skill Name & Icon -->
             <div class="flex items-center gap-3 sm:gap-3.5 sm:col-span-4">
-              <span class="flex size-7 shrink-0 items-center justify-center border border-hairline bg-[#090a0c] text-base text-chalk transition-transform duration-300 group-hover:scale-110">
+              <span class="flex size-7 shrink-0 items-center justify-center border border-hairline bg-[#090a0c] text-base text-chalk transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
                 <Icon v-if="skill.icon" :icon="skill.icon" class="size-4" />
                 <span v-else class="text-[10px] font-bold">{{ skill.name.slice(0, 2).toUpperCase() }}</span>
               </span>
-              <span class="font-sans text-base sm:text-lg font-bold text-chalk transition-colors group-hover:text-signal break-words">
+              <span class="font-sans text-base sm:text-lg font-bold text-chalk transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:text-signal break-words">
                 {{ skill.name }}
               </span>
             </div>

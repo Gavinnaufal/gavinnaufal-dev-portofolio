@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import Preloader from './components/Preloader.vue'
+import CustomCursor from './components/CustomCursor.vue'
 import AtmosphereBackground from './components/AtmosphereBackground.vue'
 import Navbar from './components/Navbar.vue'
 import Hero from './components/Hero.vue'
@@ -23,6 +24,7 @@ let tickerCallback = null
 const isPreloaderActive = ref(true)
 const scrollProgress = ref(0)
 const showScrollTop = ref(false)
+const magneticHandlers = []
 
 const onPreloaderComplete = () => {
   isPreloaderActive.value = false
@@ -30,27 +32,66 @@ const onPreloaderComplete = () => {
     lenis.start()
   }
 
-  // Cinematic Hero Reveal Sequence after preloader curtain opens
-  gsap.fromTo(
-    '#home [data-reveal-item]',
-    { y: 35, opacity: 0 },
-    {
-      y: 0,
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (isReducedMotion) {
+    gsap.set('#home [data-hero-meta], #home [data-hero-name], #home [data-hero-headline], #home [data-hero-statement], #home [data-hero-cta], #home [data-hero-portrait]', {
       opacity: 1,
-      duration: 0.9,
-      stagger: 0.08,
-      ease: 'power3.out',
-      clearProps: 'transform',
-      onComplete: () => {
-        ScrollTrigger.refresh()
-      },
-    }
+      y: 0,
+      clearProps: 'all',
+    })
+    ScrollTrigger.refresh()
+    return
+  }
+
+  // Choreographed Sequential Hero Reveal (Exact Hierarchy: Meta -> Name -> Headline -> Statement -> Portrait -> CTA)
+  const tl = gsap.timeline({
+    defaults: { ease: 'power3.out' },
+    onComplete: () => {
+      ScrollTrigger.refresh()
+    },
+  })
+
+  tl.fromTo(
+    '#home [data-hero-meta]',
+    { y: 12, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.6, clearProps: 'transform' }
   )
+    .fromTo(
+      '#home [data-hero-name]',
+      { y: 22, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.75, clearProps: 'transform' },
+      '-=0.42'
+    )
+    .fromTo(
+      '#home [data-hero-headline]',
+      { y: 16, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, clearProps: 'transform' },
+      '-=0.48'
+    )
+    .fromTo(
+      '#home [data-hero-statement]',
+      { y: 14, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.65, clearProps: 'transform' },
+      '-=0.48'
+    )
+    .fromTo(
+      '#home [data-hero-portrait]',
+      { y: 16, opacity: 0, scale: 0.99 },
+      { y: 0, opacity: 1, scale: 1.0, duration: 0.8, clearProps: 'transform' },
+      '-=0.55'
+    )
+    .fromTo(
+      '#home [data-hero-cta]',
+      { y: 12, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.6, clearProps: 'transform' },
+      '-=0.45'
+    )
 }
 
 const scrollToTop = () => {
   if (lenis) {
-    lenis.scrollTo(0, { duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
+    props.lenis?.scrollTo(0, { duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
   } else {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -92,70 +133,80 @@ onMounted(() => {
 
   // 3. GSAP Animations Context
   gsapCtx = gsap.context(() => {
-    // Section Heading reveals (with clearProps so layout is 100% natural after reveal)
-    gsap.utils.toArray('[data-reveal-heading]').forEach((el) => {
-      gsap.fromTo(
-        el,
-        { y: 28, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.85,
-          ease: 'power3.out',
-          clearProps: 'transform',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 90%',
-            toggleActions: 'play none none none',
-          },
-        }
-      )
-    })
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // Content Item Staggered entrance
-    gsap.utils.toArray('main section:not(#home) [data-reveal-item]').forEach((el) => {
-      gsap.fromTo(
-        el,
-        { y: 24, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: 'power3.out',
-          clearProps: 'transform',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 92%',
-            toggleActions: 'play none none none',
-          },
-        }
-      )
-    })
-
-    // Magnetic pull on interactive action buttons
-    const magneticEls = document.querySelectorAll('.btn-editorial-primary, .btn-editorial-secondary, [data-magnetic]')
-    magneticEls.forEach((el) => {
-      el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect()
-        const x = e.clientX - rect.left - rect.width / 2
-        const y = e.clientY - rect.top - rect.height / 2
-        gsap.to(el, {
-          x: x * 0.2,
-          y: y * 0.2,
-          duration: 0.3,
-          ease: 'power2.out',
-        })
+    if (!isReducedMotion) {
+      // Section Heading reveals (clearProps preserves clean natural layout)
+      gsap.utils.toArray('[data-reveal-heading]').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { y: 24, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            clearProps: 'transform',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
       })
 
-      el.addEventListener('mouseleave', () => {
-        gsap.to(el, {
-          x: 0,
-          y: 0,
-          duration: 0.6,
-          ease: 'elastic.out(1, 0.4)',
-        })
+      // Content Item Staggered entrance
+      gsap.utils.toArray('main section:not(#home) [data-reveal-item]').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { y: 18, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.75,
+            ease: 'power3.out',
+            clearProps: 'transform',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
       })
-    })
+    }
+
+    // Magnetic pull on interactive action buttons (desktop fine pointer only)
+    if (window.matchMedia('(pointer: fine)').matches && !isReducedMotion) {
+      const magneticEls = document.querySelectorAll('.btn-editorial-primary, .btn-editorial-secondary, [data-magnetic]')
+      magneticEls.forEach((el) => {
+        const onMouseMove = (e) => {
+          const rect = el.getBoundingClientRect()
+          const x = e.clientX - rect.left - rect.width / 2
+          const y = e.clientY - rect.top - rect.height / 2
+          gsap.to(el, {
+            x: x * 0.18,
+            y: y * 0.18,
+            duration: 0.3,
+            ease: 'power2.out',
+          })
+        }
+
+        const onMouseLeave = () => {
+          gsap.to(el, {
+            x: 0,
+            y: 0,
+            duration: 0.6,
+            ease: 'elastic.out(1, 0.4)',
+          })
+        }
+
+        el.addEventListener('mousemove', onMouseMove)
+        el.addEventListener('mouseleave', onMouseLeave)
+        magneticHandlers.push({ el, onMouseMove, onMouseLeave })
+      })
+    }
   })
 
   // Recalculate ScrollTrigger positions after Vue DOM render and window load
@@ -172,6 +223,10 @@ onBeforeUnmount(() => {
   if (tickerCallback) {
     gsap.ticker.remove(tickerCallback)
   }
+  magneticHandlers.forEach(({ el, onMouseMove, onMouseLeave }) => {
+    el.removeEventListener('mousemove', onMouseMove)
+    el.removeEventListener('mouseleave', onMouseLeave)
+  })
   if (gsapCtx) gsapCtx.revert()
   if (lenis) {
     lenis.destroy()
@@ -182,6 +237,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="relative min-h-screen bg-[#090a0c] font-sans text-chalk selection:bg-signal selection:text-white">
+    <!-- Subtle Technical Custom Cursor (Pointer-fine devices only) -->
+    <CustomCursor />
+
     <!-- Cinematic Page Preloader -->
     <Preloader @complete="onPreloaderComplete" />
 
