@@ -15,6 +15,7 @@
       { "id": "about", "label": "About" },
       { "id": "skills", "label": "Skills" },
       { "id": "projects", "label": "Projects" },
+      { "id": "experience", "label": "Experience" },
       { "id": "education", "label": "Education" },
       { "id": "contact", "label": "Contact" }
     ],
@@ -143,6 +144,23 @@
       }
     ]
   },
+  "experience": {
+    "eyebrow": "Experience",
+    "title": "Field Experience.",
+    "description": "Dokumentasi pengalaman kerja praktik industri dan penerapan kemampuan rekayasa perangkat lunak pada lingkungan kerja nyata.",
+    "company": "PT. Inforsys",
+    "role": "Programmer Intern",
+    "period": "July 2026 — Present",
+    "status": "CURRENT",
+    "environment": ["Figma", "Angular", "Tailwind CSS"],
+    "focus": [
+      { "id": "01", "label": "LANDING PAGE REDESIGN" },
+      { "id": "02", "label": "UI IMPLEMENTATION" },
+      { "id": "03", "label": "FRONTEND DEVELOPMENT" },
+      { "id": "04", "label": "RESPONSIVE INTERFACE" }
+    ],
+    "contribution": "Redesigned an existing brand landing page in Figma, then translated the visual direction into a responsive Angular implementation using Tailwind CSS."
+  },
   "education": {
     "eyebrow": "Education",
     "title": "Academic Journey.",
@@ -178,6 +196,7 @@
   "contact": {
     "eyebrow": "Contact",
     "heading": "Let's Work Together.",
+    "email": "gavinnaufal26@gmail.com",
     "description": "Tertarik untuk berkolaborasi dalam project web, magang, atau project lepas? Jangan ragu untuk menghubungi saya melalui kontak di bawah ini.",
     "status": "Terbuka untuk peluang kolaborasi & project baru",
     "items": [

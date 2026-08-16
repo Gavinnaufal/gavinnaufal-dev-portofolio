@@ -152,7 +152,8 @@ onBeforeUnmount(() => {
           <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center" data-hero-cta>
             <a
               :href="hero.buttons.primary.href"
-              class="btn-editorial-primary group justify-center sm:justify-between py-3 sm:py-4 px-5 sm:px-6"
+              :aria-label="`Scroll to ${hero.buttons.primary.label} section`"
+              class="btn-editorial-primary group justify-center sm:justify-between py-3 sm:py-4 px-5 sm:px-6 focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
               @click.prevent="scrollToSection(hero.buttons.primary.href)"
             >
               <span>{{ hero.buttons.primary.label }}</span>
@@ -160,7 +161,8 @@ onBeforeUnmount(() => {
             </a>
             <a
               :href="hero.buttons.secondary.href"
-              class="btn-editorial-secondary group justify-center sm:justify-between py-3 sm:py-4 px-5 sm:px-6"
+              :aria-label="`Scroll to ${hero.buttons.secondary.label} section`"
+              class="btn-editorial-secondary group justify-center sm:justify-between py-3 sm:py-4 px-5 sm:px-6 focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
               @click.prevent="scrollToSection(hero.buttons.secondary.href)"
             >
               <span>{{ hero.buttons.secondary.label }}</span>

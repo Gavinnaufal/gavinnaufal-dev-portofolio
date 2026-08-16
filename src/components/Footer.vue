@@ -50,7 +50,8 @@ const scrollToTop = () => {
           <p class="text-[10px] uppercase tracking-widest text-dim">// RETURN</p>
           <button
             type="button"
-            class="group inline-flex items-center gap-2 border border-hairline bg-surface px-3.5 py-2 text-xs text-chalk transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal hover:text-signal active:scale-95 focus:outline-none"
+            aria-label="Scroll back to top of page"
+            class="group inline-flex items-center gap-2 border border-hairline bg-surface px-3.5 py-2 text-xs text-chalk transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal hover:text-signal active:scale-95 focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
             @click="scrollToTop"
           >
             <span>BACK TO TOP</span>

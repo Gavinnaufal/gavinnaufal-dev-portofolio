@@ -11,7 +11,7 @@ const { projects } = portfolioData
       <div class="mb-14 sm:mb-16 flex flex-col justify-between gap-6 border-b border-hairline pb-8 sm:pb-10 lg:flex-row lg:items-end">
         <div class="space-y-3 sm:space-y-4" data-reveal-heading>
           <p class="font-mono text-xs uppercase tracking-widest text-signal">
-            // {{ projects.eyebrow }}
+            03 // {{ projects.eyebrow }}
           </p>
 
           <h2 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight text-chalk">
@@ -37,10 +37,14 @@ const { projects } = portfolioData
             :is="project.liveUrl ? 'a' : 'div'"
             :href="project.liveUrl || undefined"
             :target="project.liveUrl ? '_blank' : undefined"
-            :rel="project.liveUrl ? 'noreferrer' : undefined"
+            :rel="project.liveUrl ? 'noopener noreferrer' : undefined"
             :data-cursor="project.liveUrl ? 'view' : undefined"
-            class="relative block overflow-hidden border border-hairline-strong bg-surface transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal/70 lg:col-span-7 w-full"
-            :class="index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'"
+            :aria-label="project.liveUrl ? `Open ${project.name} live preview in new tab` : undefined"
+            class="relative block overflow-hidden border border-hairline-strong bg-surface transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal/70 lg:col-span-7 w-full focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
+            :class="[
+              index % 2 === 1 ? 'lg:order-2' : 'lg:order-1',
+              project.liveUrl ? 'cursor-pointer' : 'cursor-default'
+            ]"
           >
             <!-- Top Bar inside frame -->
             <div class="flex items-center justify-between border-b border-hairline bg-[#090a0c]/90 px-3.5 sm:px-4 py-2 sm:py-2.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-silver">
@@ -103,7 +107,8 @@ const { projects } = portfolioData
                 v-if="project.liveUrl"
                 :href="project.liveUrl"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                :aria-label="`Open ${project.name} live preview in new tab`"
                 class="btn-editorial-primary text-xs py-2.5 sm:py-3 px-4 sm:px-6"
               >
                 <span>Live Preview</span>
@@ -113,7 +118,8 @@ const { projects } = portfolioData
                 v-if="project.githubUrl"
                 :href="project.githubUrl"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                :aria-label="`Open ${project.name} source code on GitHub in new tab`"
                 class="btn-editorial-secondary text-xs py-2.5 sm:py-3 px-4 sm:px-6"
               >
                 <span>GitHub Code</span>
@@ -154,7 +160,8 @@ const { projects } = portfolioData
                   v-if="item.liveUrl"
                   :href="item.liveUrl"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
+                  :aria-label="`Open ${item.name} live preview in new tab`"
                   class="text-chalk underline decoration-hairline transition-colors duration-200 hover:text-signal hover:decoration-signal text-xs"
                 >
                   LIVE ↗
@@ -163,7 +170,8 @@ const { projects } = portfolioData
                   v-if="item.githubUrl"
                   :href="item.githubUrl"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
+                  :aria-label="`Open ${item.name} GitHub repository in new tab`"
                   class="text-dim transition-colors duration-200 hover:text-chalk text-xs"
                 >
                   CODE ↗

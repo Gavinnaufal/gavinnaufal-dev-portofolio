@@ -12,6 +12,7 @@ import Hero from './components/Hero.vue'
 import About from './components/About.vue'
 import Skills from './components/Skills.vue'
 import Projects from './components/Projects.vue'
+import Experience from './components/Experience.vue'
 import Education from './components/Education.vue'
 import Contact from './components/Contact.vue'
 import Footer from './components/Footer.vue'
@@ -91,20 +92,26 @@ const onPreloaderComplete = () => {
 
 const scrollToTop = () => {
   if (lenis) {
-    props.lenis?.scrollTo(0, { duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
+    lenis.scrollTo(0, { duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
   } else {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 }
 
 onMounted(() => {
-  // 1. Initialize Lenis with enhanced kinetic inertia configuration
+  // 1. Initialize Lenis with Heavy Physical Kinetic Mass & Accessibility Compliance
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   lenis = new Lenis({
-    duration: 1.1,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    wheelMultiplier: 1.0,
-    touchMultiplier: 1.5,
+    duration: isReducedMotion ? 0.01 : (isTouchDevice ? 0.65 : 1.35), // Weighted mass on desktop, responsive touch on mobile
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Smooth exponential deceleration
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: !isReducedMotion,
+    wheelMultiplier: 0.82, // Tactile mechanical resistance giving solid physical weight
+    touchMultiplier: 1.5,  // Direct responsive touch
+    infinite: false,
   })
 
   // Freeze scroll while preloader is active
@@ -131,7 +138,7 @@ onMounted(() => {
   gsap.ticker.add(tickerCallback)
   gsap.ticker.lagSmoothing(0)
 
-  // 3. GSAP Animations Context
+  // 3. GSAP Animations Context (Content Animation Ownership)
   gsapCtx = gsap.context(() => {
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -175,37 +182,37 @@ onMounted(() => {
           }
         )
       })
-    }
 
-    // Magnetic pull on interactive action buttons (desktop fine pointer only)
-    if (window.matchMedia('(pointer: fine)').matches && !isReducedMotion) {
-      const magneticEls = document.querySelectorAll('.btn-editorial-primary, .btn-editorial-secondary, [data-magnetic]')
-      magneticEls.forEach((el) => {
-        const onMouseMove = (e) => {
-          const rect = el.getBoundingClientRect()
-          const x = e.clientX - rect.left - rect.width / 2
-          const y = e.clientY - rect.top - rect.height / 2
-          gsap.to(el, {
-            x: x * 0.18,
-            y: y * 0.18,
-            duration: 0.3,
-            ease: 'power2.out',
-          })
-        }
+      // Magnetic Button interactions on Desktop
+      const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+      if (isFinePointer) {
+        document.querySelectorAll('[data-magnetic]').forEach((el) => {
+          const onMouseMove = (e) => {
+            const rect = el.getBoundingClientRect()
+            const x = e.clientX - rect.left - rect.width / 2
+            const y = e.clientY - rect.top - rect.height / 2
+            gsap.to(el, {
+              x: x * 0.18,
+              y: y * 0.18,
+              duration: 0.3,
+              ease: 'power2.out',
+            })
+          }
 
-        const onMouseLeave = () => {
-          gsap.to(el, {
-            x: 0,
-            y: 0,
-            duration: 0.6,
-            ease: 'elastic.out(1, 0.4)',
-          })
-        }
+          const onMouseLeave = () => {
+            gsap.to(el, {
+              x: 0,
+              y: 0,
+              duration: 0.6,
+              ease: 'elastic.out(1, 0.4)',
+            })
+          }
 
-        el.addEventListener('mousemove', onMouseMove)
-        el.addEventListener('mouseleave', onMouseLeave)
-        magneticHandlers.push({ el, onMouseMove, onMouseLeave })
-      })
+          el.addEventListener('mousemove', onMouseMove)
+          el.addEventListener('mouseleave', onMouseLeave)
+          magneticHandlers.push({ el, onMouseMove, onMouseLeave })
+        })
+      }
     }
   })
 
@@ -261,6 +268,7 @@ onBeforeUnmount(() => {
       <About />
       <Skills />
       <Projects />
+      <Experience />
       <Education />
       <Contact />
     </main>
@@ -273,8 +281,8 @@ onBeforeUnmount(() => {
       type="button"
       data-magnetic
       aria-label="Scroll back to top"
-      class="fixed bottom-6 right-6 z-40 border border-hairline-strong bg-surface-elevated px-3.5 py-2 font-mono text-xs uppercase tracking-widest text-chalk shadow-2xl transition-colors hover:border-signal hover:bg-signal hover:text-white focus:outline-none"
-      :class="showScrollTop ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'"
+      class="fixed bottom-6 right-6 z-40 border border-hairline-strong bg-surface-elevated px-3.5 py-2 font-mono text-xs uppercase tracking-widest text-chalk shadow-2xl transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-signal hover:bg-signal hover:text-white focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
+      :class="showScrollTop ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'"
       @click="scrollToTop"
     >
       <span>TOP ↑</span>

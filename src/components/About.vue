@@ -12,7 +12,7 @@ const paragraphs = about.paragraphs || [about.summary]
       <div class="mb-12 sm:mb-16 grid items-end justify-between gap-6 sm:gap-8 border-b border-hairline pb-8 sm:pb-12 lg:grid-cols-12">
         <div class="space-y-3 sm:space-y-4 lg:col-span-7" data-reveal-heading>
           <p class="font-mono text-xs uppercase tracking-widest text-signal">
-            // {{ about.eyebrow }}
+            01 // {{ about.eyebrow }}
           </p>
 
           <h2 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight text-chalk break-words">

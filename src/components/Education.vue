@@ -11,7 +11,7 @@ const { education } = portfolioData
         <!-- Kolom Kiri: Header / Context (Static normal flow, responsive) -->
         <div class="lg:col-span-5 flex flex-col gap-3 sm:gap-4" data-reveal-heading>
           <span class="font-mono text-xs text-signal tracking-widest uppercase block">
-            04 // {{ education.eyebrow }}
+            05 // {{ education.eyebrow }}
           </span>
           <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-chalk leading-tight m-0 p-0">
             {{ education.title }}

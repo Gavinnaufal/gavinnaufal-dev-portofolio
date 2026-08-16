@@ -43,13 +43,14 @@ onMounted(() => {
     about: 0.35,
     skills: 0.20,
     projects: 0.70,
+    experience: 0.40,
     education: 0.30,
     contact: 0.18,
   }
 
   const updateSectionIntensity = () => {
     const scrollPos = window.scrollY + window.innerHeight * 0.35
-    const sections = ['home', 'about', 'skills', 'projects', 'education', 'contact']
+    const sections = ['home', 'about', 'skills', 'projects', 'experience', 'education', 'contact']
     
     for (let i = sections.length - 1; i >= 0; i--) {
       const el = document.getElementById(sections[i])

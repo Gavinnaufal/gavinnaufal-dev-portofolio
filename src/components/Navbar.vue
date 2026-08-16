@@ -129,7 +129,7 @@ watch(isOpen, (value) => {
         <!-- Brand / Name -->
         <a
           href="#home"
-          class="flex items-center gap-2.5 font-display text-base font-bold tracking-tight text-chalk transition-colors hover:text-signal focus:outline-none sm:text-lg shrink-0"
+          class="flex items-center gap-2.5 font-display text-base font-bold tracking-tight text-chalk transition-colors hover:text-signal focus-visible:ring-2 focus-visible:ring-signal focus:outline-none sm:text-lg shrink-0"
           @click.prevent="scrollToSection('home')"
           @mouseenter="playHoverSound"
         >
@@ -143,7 +143,7 @@ watch(isOpen, (value) => {
             v-for="item in navItems"
             :key="item.id"
             :href="`#${item.id}`"
-            class="relative px-3.5 py-2 text-silver transition-colors duration-200 hover:text-chalk focus:outline-none"
+            class="relative px-3.5 py-2 text-silver transition-colors duration-200 hover:text-chalk focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
             :class="{ 'text-chalk font-bold': activeSection === item.id }"
             @click.prevent="scrollToSection(item.id)"
             @mouseenter="playHoverSound"
@@ -161,10 +161,10 @@ watch(isOpen, (value) => {
           <!-- Minimalist Sound Toggle -->
           <button
             type="button"
-            class="hidden border border-hairline bg-surface/80 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-silver transition-colors hover:border-signal hover:text-chalk sm:inline-flex items-center gap-1.5 focus:outline-none"
+            class="hidden border border-hairline bg-surface/80 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-silver transition-colors hover:border-signal hover:text-chalk sm:inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
             @click="toggleSound"
             @mouseenter="playHoverSound"
-            :aria-label="isSoundEnabled ? 'Mute sound' : 'Enable sound'"
+            :aria-label="isSoundEnabled ? 'Mute synthesized sound effects' : 'Enable synthesized sound effects'"
           >
             <span class="size-1.5 rounded-full" :class="isSoundEnabled ? 'bg-signal animate-ping' : 'bg-dim'"></span>
             <span>AUDIO: {{ isSoundEnabled ? 'ON' : 'OFF' }}</span>
@@ -174,7 +174,8 @@ watch(isOpen, (value) => {
           <a
             :href="navigation.cta.href"
             data-magnetic
-            class="hidden border border-hairline-strong bg-surface px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-chalk transition-all duration-300 hover:border-signal hover:bg-signal hover:text-white sm:inline-flex"
+            aria-label="Scroll to contact section"
+            class="hidden border border-hairline-strong bg-surface px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-chalk transition-all duration-300 hover:border-signal hover:bg-signal hover:text-white focus-visible:ring-2 focus-visible:ring-signal focus:outline-none sm:inline-flex"
             @click.prevent="scrollToSection('contact')"
             @mouseenter="playHoverSound"
           >
@@ -184,7 +185,7 @@ watch(isOpen, (value) => {
           <!-- Polished Animated Hamburger Button (44px Touch Target) -->
           <button
             type="button"
-            class="group flex size-11 items-center justify-center border transition-all duration-300 md:hidden focus:outline-none touch-manipulation active:scale-95"
+            class="group flex size-11 items-center justify-center border transition-all duration-300 md:hidden focus-visible:ring-2 focus-visible:ring-signal focus:outline-none touch-manipulation active:scale-95"
             :class="isOpen ? 'border-signal bg-surface-elevated' : 'border-hairline bg-surface hover:border-chalk'"
             :aria-expanded="isOpen"
             :aria-label="isOpen ? 'Close navigation menu' : 'Open navigation menu'"
