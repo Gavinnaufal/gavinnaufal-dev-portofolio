@@ -1,12 +1,16 @@
 <script setup>
 import portfolioData from '@/data/portfolio.json'
+import ProjectsMotionGraphics from './ProjectsMotionGraphics.vue'
 
 const { projects } = portfolioData
 </script>
 
 <template>
-  <section id="projects" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
-    <div class="editorial-shell">
+  <section id="projects" class="relative border-b border-hairline py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <!-- Chapter 03: Media Framing System Background Graphics -->
+    <ProjectsMotionGraphics />
+
+    <div class="editorial-shell relative z-10">
       <!-- Section Header -->
       <div class="mb-14 sm:mb-16 flex flex-col justify-between gap-6 border-b border-hairline pb-8 sm:pb-10 lg:flex-row lg:items-end">
         <div class="space-y-3 sm:space-y-4" data-reveal-heading>
@@ -46,8 +50,14 @@ const { projects } = portfolioData
               project.liveUrl ? 'cursor-pointer' : 'cursor-default'
             ]"
           >
+            <!-- Framing Corner Brackets (Media / Framing Motion System) -->
+            <div class="pointer-events-none absolute top-0 left-0 size-2.5 border-t-2 border-l-2 border-signal opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 z-20"></div>
+            <div class="pointer-events-none absolute top-0 right-0 size-2.5 border-t-2 border-r-2 border-signal opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 z-20"></div>
+            <div class="pointer-events-none absolute bottom-0 left-0 size-2.5 border-b-2 border-l-2 border-signal opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:-translate-x-0.5 group-hover:translate-y-0.5 z-20"></div>
+            <div class="pointer-events-none absolute bottom-0 right-0 size-2.5 border-b-2 border-r-2 border-signal opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:translate-y-0.5 z-20"></div>
+
             <!-- Top Bar inside frame -->
-            <div class="flex items-center justify-between border-b border-hairline bg-[#090a0c]/90 px-3.5 sm:px-4 py-2 sm:py-2.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-silver">
+            <div class="flex items-center justify-between border-b border-hairline bg-canvas/90 px-3.5 sm:px-4 py-2 sm:py-2.5 font-mono text-[11px] sm:text-xs uppercase tracking-wider text-silver">
               <div class="flex items-center gap-2">
                 <span class="text-signal font-bold">[{{ String(index + 1).padStart(2, '0') }}]</span>
                 <span class="text-chalk font-semibold truncate">{{ project.category }}</span>
@@ -134,7 +144,7 @@ const { projects } = portfolioData
       <div class="mt-14 sm:mt-16 space-y-4" data-reveal-item>
         <p class="font-mono text-xs uppercase tracking-[0.2em] text-dim">// ALL PROJECTS DIRECTORY</p>
         <div class="border border-hairline bg-surface font-mono text-xs overflow-hidden">
-          <div class="hidden grid-cols-12 border-b border-hairline bg-[#090a0c] px-4 sm:px-6 py-3 uppercase tracking-widest text-dim sm:grid">
+          <div class="hidden grid-cols-12 border-b border-hairline bg-canvas px-4 sm:px-6 py-3 uppercase tracking-widest text-dim sm:grid">
             <div class="col-span-1">NO.</div>
             <div class="col-span-5">TITLE</div>
             <div class="col-span-3">CATEGORY</div>

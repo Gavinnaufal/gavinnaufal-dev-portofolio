@@ -2,6 +2,7 @@
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import portfolioData from '@/data/portfolio.json'
 import { isSoundEnabled, playClickSound, playHoverSound, toggleSound } from '@/utils/audio'
+import { isDark, toggleTheme, initTheme } from '@/utils/theme'
 
 const props = defineProps({
   lenis: {
@@ -16,6 +17,11 @@ const navItems = navigation.links
 const isScrolled = ref(false)
 const isOpen = ref(false)
 const activeSection = ref('')
+
+const handleThemeToggle = () => {
+  playClickSound()
+  toggleTheme()
+}
 
 const updateNavigation = () => {
   isScrolled.value = window.scrollY > 30
@@ -88,6 +94,7 @@ const scrollToSection = (id) => {
 }
 
 onMounted(() => {
+  initTheme()
   updateNavigation()
   window.addEventListener('scroll', updateNavigation, { passive: true })
   window.addEventListener('keydown', handleKeydown)
@@ -118,9 +125,9 @@ watch(isOpen, (value) => {
     class="fixed inset-x-0 top-0 z-50 transition-colors duration-300"
     :class="[
       isOpen
-        ? 'bg-[#090a0c] border-b border-hairline shadow-2xl'
+        ? 'bg-canvas border-b border-hairline shadow-2xl'
         : isScrolled
-          ? 'bg-[#090a0c]/90 backdrop-blur-md border-b border-hairline'
+          ? 'bg-canvas/90 backdrop-blur-md border-b border-hairline'
           : 'bg-transparent border-b border-hairline/30',
     ]"
   >
@@ -156,12 +163,25 @@ watch(isOpen, (value) => {
           </a>
         </div>
 
-        <!-- Right Side: Sound Toggle + Contact CTA + Mobile Menu Button -->
-        <div class="flex items-center gap-2.5 sm:gap-3">
+        <!-- Right Side: Theme Toggle + Sound Toggle + Contact CTA + Mobile Menu Button -->
+        <div class="flex items-center gap-2 sm:gap-2.5">
+          <!-- Minimalist Theme Toggle (Editorial Style) -->
+          <button
+            type="button"
+            class="border border-hairline bg-surface/80 px-2.5 sm:px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-silver transition-colors hover:border-signal hover:text-chalk inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-signal focus:outline-none min-h-[36px]"
+            @click="handleThemeToggle"
+            @mouseenter="playHoverSound"
+            :aria-label="isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'"
+            :aria-pressed="isDark"
+          >
+            <span class="text-signal text-[11px] font-bold">{{ isDark ? '☾' : '☼' }}</span>
+            <span>{{ isDark ? 'DARK' : 'LIGHT' }}</span>
+          </button>
+
           <!-- Minimalist Sound Toggle -->
           <button
             type="button"
-            class="hidden border border-hairline bg-surface/80 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-silver transition-colors hover:border-signal hover:text-chalk sm:inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-signal focus:outline-none"
+            class="hidden border border-hairline bg-surface/80 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-silver transition-colors hover:border-signal hover:text-chalk sm:inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-signal focus:outline-none min-h-[36px]"
             @click="toggleSound"
             @mouseenter="playHoverSound"
             :aria-label="isSoundEnabled ? 'Mute synthesized sound effects' : 'Enable synthesized sound effects'"
@@ -175,7 +195,7 @@ watch(isOpen, (value) => {
             :href="navigation.cta.href"
             data-magnetic
             aria-label="Scroll to contact section"
-            class="hidden border border-hairline-strong bg-surface px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-chalk transition-all duration-300 hover:border-signal hover:bg-signal hover:text-white focus-visible:ring-2 focus-visible:ring-signal focus:outline-none sm:inline-flex"
+            class="hidden border border-hairline-strong bg-surface px-5 py-2 font-mono text-xs uppercase tracking-wider text-chalk transition-all duration-300 hover:border-signal hover:bg-signal hover:text-white focus-visible:ring-2 focus-visible:ring-signal focus:outline-none sm:inline-flex items-center min-h-[36px]"
             @click.prevent="scrollToSection('contact')"
             @mouseenter="playHoverSound"
           >
@@ -185,7 +205,7 @@ watch(isOpen, (value) => {
           <!-- Polished Animated Hamburger Button (44px Touch Target) -->
           <button
             type="button"
-            class="group flex size-11 items-center justify-center border transition-all duration-300 md:hidden focus-visible:ring-2 focus-visible:ring-signal focus:outline-none touch-manipulation active:scale-95"
+            class="group flex size-11 items-center justify-center border transition-all duration-300 md:hidden focus-visible:ring-2 focus-visible:ring-signal focus:outline-none touch-manipulation active:scale-95 shrink-0"
             :class="isOpen ? 'border-signal bg-surface-elevated' : 'border-hairline bg-surface hover:border-chalk'"
             :aria-expanded="isOpen"
             :aria-label="isOpen ? 'Close navigation menu' : 'Open navigation menu'"
@@ -222,15 +242,22 @@ watch(isOpen, (value) => {
       <div
         v-if="isOpen"
         id="mobile-nav-drawer"
-        class="fixed inset-x-0 top-16 z-40 flex flex-col justify-between bg-[#090a0c] px-6 py-8 border-b border-hairline sm:top-20 h-[calc(100dvh-4rem)] sm:h-[calc(100dvh-5rem)] overflow-y-auto"
+        class="fixed inset-x-0 top-16 z-40 flex flex-col justify-between bg-canvas px-6 py-8 border-b border-hairline sm:top-20 h-[calc(100dvh-4rem)] sm:h-[calc(100dvh-5rem)] overflow-y-auto"
       >
         <div class="space-y-6">
           <!-- Top Utility Bar inside Drawer -->
-          <div class="flex items-center justify-between border-b border-hairline/60 pb-3">
-            <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-dim">// NAVIGATION DIRECTORY</p>
+          <div class="flex items-center justify-between border-b border-hairline/60 pb-3 font-mono text-[11px] uppercase">
             <button
               type="button"
-              class="font-mono text-[11px] uppercase tracking-wider text-silver flex items-center gap-1.5 transition-colors hover:text-signal"
+              class="tracking-wider text-silver flex items-center gap-1.5 transition-colors hover:text-signal"
+              @click="handleThemeToggle"
+            >
+              <span class="text-signal text-[11px] font-bold">{{ isDark ? '☾' : '☼' }}</span>
+              <span>THEME: {{ isDark ? 'DARK' : 'LIGHT' }}</span>
+            </button>
+            <button
+              type="button"
+              class="tracking-wider text-silver flex items-center gap-1.5 transition-colors hover:text-signal"
               @click="toggleSound"
             >
               <span class="size-1.5 rounded-full" :class="isSoundEnabled ? 'bg-signal' : 'bg-dim'"></span>

@@ -1,6 +1,7 @@
 <script setup>
 import { onBeforeUnmount, ref } from 'vue'
 import portfolioData from '@/data/portfolio.json'
+import ContactMotionGraphics from './ContactMotionGraphics.vue'
 
 const { contact } = portfolioData
 const isCopied = ref(false)
@@ -40,8 +41,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section id="contact" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
-    <div class="editorial-shell">
+  <section id="contact" class="relative border-b border-hairline py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <!-- Chapter 06: Signal / Final Resting State Background Graphics -->
+    <ContactMotionGraphics />
+
+    <div class="editorial-shell relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-start w-full">
         <!-- Left 6 Columns: Statement, Email Copy & Status -->
         <div class="space-y-4 sm:space-y-6 lg:col-span-6 min-w-0" data-reveal-heading>

@@ -1,12 +1,16 @@
 <script setup>
 import portfolioData from '@/data/portfolio.json'
+import ExperienceMotionGraphics from './ExperienceMotionGraphics.vue'
 
 const { experience } = portfolioData
 </script>
 
 <template>
-  <section id="experience" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
-    <div class="editorial-shell">
+  <section id="experience" class="relative border-b border-hairline py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <!-- Chapter 04: Technical Document / Archive Background Graphics -->
+    <ExperienceMotionGraphics />
+
+    <div class="editorial-shell relative z-10">
       <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-16 w-full">
         <!-- Kolom Kiri: Section Identity & Context -->
         <div class="lg:col-span-5 flex flex-col gap-3 sm:gap-4" data-reveal-heading>

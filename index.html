@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id" class="dark scroll-smooth bg-[#090a0c] text-[#f4f4f0] antialiased selection:bg-[#ff3b00] selection:text-white">
+<html lang="id" class="scroll-smooth antialiased">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
@@ -9,6 +9,19 @@
       content="Gavin Naufal Karnedi — Creative Frontend & Web Developer. Swiss-inspired modern editorial web engineering and high-performance digital interfaces."
     />
     <title>Gavin Naufal Karnedi — Web Developer & Creative Technologist</title>
+    <!-- Early Theme Initialization to Prevent FOUT (Default: Light Mode) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('portfolio-theme');
+          if (saved === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,7 +29,7 @@
       rel="stylesheet"
     />
   </head>
-  <body class="min-h-screen bg-[#090a0c] font-sans text-[#f4f4f0] overflow-x-hidden selection:bg-[#ff3b00] selection:text-white">
+  <body class="min-h-screen bg-canvas font-sans text-chalk overflow-x-hidden selection:bg-signal selection:text-white">
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>

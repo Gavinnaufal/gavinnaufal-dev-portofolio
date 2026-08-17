@@ -20,7 +20,7 @@ const scrollToTop = () => {
 </script>
 
 <template>
-  <footer class="bg-[#090a0c] py-14 text-silver">
+  <footer class="bg-canvas py-14 text-silver">
     <div class="editorial-shell space-y-10">
       <!-- Main Footer Grid -->
       <div class="grid gap-8 border-b border-hairline pb-10 sm:grid-cols-2 lg:grid-cols-4 font-mono text-xs">
@@ -40,9 +40,9 @@ const scrollToTop = () => {
 
         <!-- Stack Note -->
         <div class="space-y-2">
-          <p class="text-[10px] uppercase tracking-widest text-dim">// BUILT WITH</p>
+          <!-- <p class="text-[10px] uppercase tracking-widest text-dim">// BUILT WITH</p>
           <p class="text-chalk">Vue 3 + GSAP + Lenis</p>
-          <p class="text-dim">Tailwind CSS</p>
+          <p class="text-dim">Tailwind CSS</p> -->
         </div>
 
         <!-- Back to Top Button -->
@@ -63,7 +63,7 @@ const scrollToTop = () => {
       <!-- Bottom Line -->
       <div class="flex flex-col justify-between gap-3 font-mono text-xs text-dim sm:flex-row sm:items-center">
         <p>{{ footer.copyright }}</p>
-        <p>{{ footer.colophon }}</p>
+        <!-- <p>{{ footer.colophon }}</p> -->
       </div>
     </div>
   </footer>

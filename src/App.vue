@@ -3,6 +3,7 @@ import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { initTheme } from './utils/theme'
 
 import Preloader from './components/Preloader.vue'
 import CustomCursor from './components/CustomCursor.vue'
@@ -99,6 +100,7 @@ const scrollToTop = () => {
 }
 
 onMounted(() => {
+  initTheme()
   // 1. Initialize Lenis with Heavy Physical Kinetic Mass & Accessibility Compliance
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
   const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -243,7 +245,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative min-h-screen bg-[#090a0c] font-sans text-chalk selection:bg-signal selection:text-white">
+  <div class="relative min-h-screen bg-canvas font-sans text-chalk selection:bg-signal selection:text-white">
     <!-- Subtle Technical Custom Cursor (Pointer-fine devices only) -->
     <CustomCursor />
 

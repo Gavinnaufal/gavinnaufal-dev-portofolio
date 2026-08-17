@@ -1,13 +1,17 @@
 <script setup>
 import portfolioData from '@/data/portfolio.json'
+import AboutMotionGraphics from './AboutMotionGraphics.vue'
 
 const { about } = portfolioData
 const paragraphs = about.paragraphs || [about.summary]
 </script>
 
 <template>
-  <section id="about" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
-    <div class="editorial-shell">
+  <section id="about" class="relative border-b border-hairline py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <!-- Chapter 01: Editorial Typographic Field Background Graphics -->
+    <AboutMotionGraphics />
+
+    <div class="editorial-shell relative z-10">
       <!-- Section Header -->
       <div class="mb-12 sm:mb-16 grid items-end justify-between gap-6 sm:gap-8 border-b border-hairline pb-8 sm:pb-12 lg:grid-cols-12">
         <div class="space-y-3 sm:space-y-4 lg:col-span-7" data-reveal-heading>

@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import portfolioData from '@/data/portfolio.json'
+import SkillsMotionGraphics from './SkillsMotionGraphics.vue'
 
 const { skills } = portfolioData
 const activeCategory = ref('ALL')
@@ -25,8 +26,11 @@ const filteredSkills = computed(() => {
 </script>
 
 <template>
-  <section id="skills" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
-    <div class="editorial-shell">
+  <section id="skills" class="relative border-b border-hairline py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <!-- Chapter 02: Technical Blueprint Field Background Graphics -->
+    <SkillsMotionGraphics />
+
+    <div class="editorial-shell relative z-10">
       <!-- Section Header -->
       <div class="mb-12 sm:mb-14 grid items-end justify-between gap-6 sm:gap-8 lg:grid-cols-12">
         <div class="space-y-3 sm:space-y-4 lg:col-span-8" data-reveal-heading>
@@ -60,10 +64,19 @@ const filteredSkills = computed(() => {
         </div>
       </div>
 
-      <!-- Tabular Technical Matrix -->
-      <div class="border border-hairline bg-surface font-mono overflow-hidden" data-reveal-item>
+      <!-- Tabular Technical Matrix with Blueprint Registration Marks & Scanning Line -->
+      <div class="relative border border-hairline-strong bg-surface font-mono overflow-hidden" data-reveal-item>
+        <!-- Corner Registration Marks -->
+        <span class="absolute -top-1.5 -left-1.5 size-3 font-mono text-[9px] text-signal font-bold leading-none select-none z-10">+</span>
+        <span class="absolute -top-1.5 -right-1.5 size-3 font-mono text-[9px] text-signal font-bold leading-none select-none z-10">+</span>
+        <span class="absolute -bottom-1.5 -left-1.5 size-3 font-mono text-[9px] text-signal font-bold leading-none select-none z-10">+</span>
+        <span class="absolute -bottom-1.5 -right-1.5 size-3 font-mono text-[9px] text-signal font-bold leading-none select-none z-10">+</span>
+
+        <!-- Subtle Matrix Technical Scanning Line (6.8s Cycle) -->
+        <div class="skills-scan-line pointer-events-none absolute top-0 left-0 h-full w-[2px] bg-gradient-to-b from-transparent via-signal/30 to-transparent z-10"></div>
+
         <!-- Table Header -->
-        <div class="hidden grid-cols-12 border-b border-hairline bg-[#090a0c] px-4 sm:px-6 py-3.5 text-xs uppercase tracking-widest text-dim md:grid">
+        <div class="hidden grid-cols-12 border-b border-hairline bg-canvas px-4 sm:px-6 py-3.5 text-xs uppercase tracking-widest text-dim md:grid">
           <div class="col-span-1">#</div>
           <div class="col-span-4">TECHNOLOGY</div>
           <div class="col-span-3">CATEGORY</div>
@@ -84,7 +97,7 @@ const filteredSkills = computed(() => {
 
             <!-- Skill Name & Icon -->
             <div class="flex items-center gap-3 sm:gap-3.5 sm:col-span-4">
-              <span class="flex size-7 shrink-0 items-center justify-center border border-hairline bg-[#090a0c] text-base text-chalk transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
+              <span class="flex size-7 shrink-0 items-center justify-center border border-hairline bg-canvas text-base text-chalk transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
                 <Icon v-if="skill.icon" :icon="skill.icon" class="size-4" />
                 <span v-else class="text-[10px] font-bold">{{ skill.name.slice(0, 2).toUpperCase() }}</span>
               </span>
@@ -110,3 +123,23 @@ const filteredSkills = computed(() => {
     </div>
   </section>
 </template>
+
+<style scoped>
+.skills-scan-line {
+  animation: matrix-scan 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes matrix-scan {
+  0% { transform: translateX(-100%); opacity: 0; }
+  10% { opacity: 0.65; }
+  90% { opacity: 0.65; }
+  100% { transform: translateX(1100px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-scan-line {
+    animation: none !important;
+    display: none;
+  }
+}
+</style>

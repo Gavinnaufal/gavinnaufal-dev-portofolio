@@ -1,12 +1,16 @@
 <script setup>
 import portfolioData from '@/data/portfolio.json'
+import EducationMotionGraphics from './EducationMotionGraphics.vue'
 
 const { education } = portfolioData
 </script>
 
 <template>
-  <section id="education" class="border-b border-hairline py-16 sm:py-24 lg:py-32">
-    <div class="editorial-shell">
+  <section id="education" class="relative border-b border-hairline py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <!-- Chapter 05: Chronological Time-Dial Background Graphics -->
+    <EducationMotionGraphics />
+
+    <div class="editorial-shell relative z-10">
       <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-16 w-full">
         <!-- Kolom Kiri: Header / Context (Static normal flow, responsive) -->
         <div class="lg:col-span-5 flex flex-col gap-3 sm:gap-4" data-reveal-heading>
@@ -32,7 +36,7 @@ const { education } = portfolioData
             >
               <!-- Timeline Dot Marker (Mathematically centered on border line) -->
               <span
-                class="absolute -left-[7px] top-1.5 size-3 rounded-full border border-[#090a0c] bg-surface-muted ring-4 ring-[#090a0c] transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:bg-signal"
+                class="absolute -left-[7px] top-1.5 size-3 rounded-full border border-canvas bg-surface-muted ring-4 ring-canvas transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:bg-signal"
                 :class="item.active ? 'bg-signal' : 'bg-surface-muted'"
               ></span>
 

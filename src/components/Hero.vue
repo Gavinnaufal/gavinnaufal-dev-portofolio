@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import portfolioData from '@/data/portfolio.json'
+import HeroMotionGraphics from './HeroMotionGraphics.vue'
 
 const props = defineProps({
   lenis: {
@@ -123,6 +124,9 @@ onBeforeUnmount(() => {
 
 <template>
   <section id="home" class="relative flex min-h-[85vh] items-center overflow-hidden pt-20 pb-12 sm:pt-28 sm:pb-20 lg:pt-36 lg:pb-28">
+    <!-- Visual Motion Graphics Environment Layer -->
+    <HeroMotionGraphics />
+
     <div class="editorial-shell relative z-10 w-full">
       <div class="grid items-center gap-8 sm:gap-12 lg:grid-cols-12 lg:gap-14 w-full">
         <!-- Left / Content Area (7 Cols) -->
@@ -175,11 +179,11 @@ onBeforeUnmount(() => {
         <div class="lg:col-span-5 [perspective:1200px] w-full" data-hero-portrait>
           <div
             ref="card3d"
-            class="relative mx-auto max-w-xs sm:max-w-sm lg:max-w-none cursor-pointer border border-white/12 bg-surface p-2 sm:p-2.5 shadow-2xl transition-shadow duration-300 hover:border-signal/70 hover:shadow-[0_25px_60px_rgba(255,59,0,0.15)] [transform-style:preserve-3d] will-change-transform"
+            class="relative mx-auto max-w-xs sm:max-w-sm lg:max-w-none cursor-pointer border border-hairline-strong bg-surface p-2 sm:p-2.5 shadow-2xl transition-shadow duration-300 hover:border-signal/70 hover:shadow-[0_25px_60px_rgba(255,59,0,0.15)] [transform-style:preserve-3d] will-change-transform"
             @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave"
           >
-            <div class="relative aspect-[4/5] w-full overflow-hidden bg-neutral-900 [transform-style:preserve-3d]">
+            <div class="relative aspect-[4/5] w-full overflow-hidden bg-surface-elevated [transform-style:preserve-3d]">
               <img
                 src="@/assets/images/gavin_gtg.jpg"
                 :alt="profile.name"

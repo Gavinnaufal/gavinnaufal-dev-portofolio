@@ -91,18 +91,18 @@ onMounted(() => {
   <div
     v-if="!isFinished"
     ref="preloaderEl"
-    class="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden pointer-events-auto bg-[#090a0c]"
+    class="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden pointer-events-auto bg-canvas"
   >
     <!-- Top Curtain -->
     <div
       ref="curtainTop"
-      class="absolute top-0 inset-x-0 h-1/2 bg-[#090a0c] border-b border-white/10"
+      class="absolute top-0 inset-x-0 h-1/2 bg-canvas border-b border-hairline"
     ></div>
 
     <!-- Bottom Curtain -->
     <div
       ref="curtainBottom"
-      class="absolute bottom-0 inset-x-0 h-1/2 bg-[#090a0c] border-t border-white/10"
+      class="absolute bottom-0 inset-x-0 h-1/2 bg-canvas border-t border-hairline"
     ></div>
 
     <!-- Central Minimalist Counter & Index Content -->
@@ -124,9 +124,9 @@ onMounted(() => {
 
       <!-- Live Loading Status Bar -->
       <div class="flex items-center gap-4 text-dim">
-        <div class="h-[1px] w-12 bg-white/20"></div>
+        <div class="h-[1px] w-12 bg-hairline-strong"></div>
         <span class="tracking-widest text-[11px] text-chalk font-semibold">{{ statusText }}</span>
-        <div class="h-[1px] w-12 bg-white/20"></div>
+        <div class="h-[1px] w-12 bg-hairline-strong"></div>
       </div>
     </div>
   </div>

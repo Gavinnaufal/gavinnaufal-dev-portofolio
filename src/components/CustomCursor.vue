@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
     <!-- State 03: Project Hover Compact Badge [ VIEW ↗ ] -->
     <div
       v-else-if="isViewingProject"
-      class="flex items-center gap-1.5 border border-signal/80 bg-[#090a0c]/90 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-chalk shadow-lg transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] backdrop-blur-sm"
+      class="flex items-center gap-1.5 border border-signal/80 bg-surface-elevated/95 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-chalk shadow-lg transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] backdrop-blur-sm"
       :class="{ 'scale-90': isPressed, 'scale-100': !isPressed }"
     >
       <span class="size-1 rounded-full bg-signal animate-pulse"></span>

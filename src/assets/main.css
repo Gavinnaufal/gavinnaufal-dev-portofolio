@@ -4,12 +4,29 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
-    --canvas: #090a0c;
-    --surface: #111216;
-    --chalk: #f4f4f0;
-    --silver: #9b9da4;
+    color-scheme: light;
+    /* Light Mode Tokens (Warm Editorial Paper & Technical Print) */
+    --canvas: #f4f3ee;
+    --surface: #ebe9e1;
+    --surface-elevated: #e2dfd6;
+    --surface-muted: #dcd8ce;
+    --surface-card: #eceae3;
+    
+    --chalk: #111216; /* Deep charcoal primary text */
+    --silver: #5c606c; /* Muted charcoal secondary text */
+    --dim: #7d8290; /* Subtle tertiary text */
+    
+    --hairline: rgba(17, 18, 22, 0.09);
+    --hairline-strong: rgba(17, 18, 22, 0.18);
+    --hairline-faint: rgba(17, 18, 22, 0.04);
+    
     --signal: #ff3b00;
+    --signal-hover: #ff5522;
+    --signal-glow: rgba(255, 59, 0, 0.18);
+    
+    --ink: #090a0c;
+    --muted: #5c606c;
+    --line: rgba(17, 18, 22, 0.09);
 
     /* Motion Tokens */
     --ease-ui: cubic-bezier(0.16, 1, 0.3, 1);
@@ -20,6 +37,32 @@
     --dur-cinema: 750ms;
   }
 
+  .dark {
+    color-scheme: dark;
+    /* Dark Mode Tokens (Obsidian Brutalism - 100% Preserved) */
+    --canvas: #090a0c;
+    --surface: #111216;
+    --surface-elevated: #17181f;
+    --surface-muted: #1e2029;
+    --surface-card: #13141a;
+    
+    --chalk: #f4f4f0;
+    --silver: #9b9da4;
+    --dim: #5c606c;
+    
+    --hairline: rgba(255, 255, 255, 0.08);
+    --hairline-strong: rgba(255, 255, 255, 0.16);
+    --hairline-faint: rgba(255, 255, 255, 0.04);
+    
+    --signal: #ff3b00;
+    --signal-hover: #ff5522;
+    --signal-glow: rgba(255, 59, 0, 0.18);
+    
+    --ink: #0b0d12;
+    --muted: #9b9da4;
+    --line: rgba(255, 255, 255, 0.08);
+  }
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -27,8 +70,8 @@
   }
 
   html {
-    background-color: #090a0c;
-    color: #f4f4f0;
+    background-color: var(--canvas);
+    color: var(--chalk);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -58,11 +101,12 @@
   }
 
   body {
-    background-color: #090a0c;
-    color: #f4f4f0;
+    background-color: var(--canvas);
+    color: var(--chalk);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    transition: background-color 250ms ease, color 250ms ease;
   }
 
   /* Custom subtle scrollbar */
@@ -71,14 +115,14 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #090a0c;
+    background: var(--canvas);
   }
   ::-webkit-scrollbar-thumb {
-    background: #23252d;
+    background: var(--surface-muted);
     border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #373a46;
+    background: var(--silver);
   }
 
   ::selection {
@@ -101,16 +145,16 @@
 
   /* Hairline borders */
   .border-hairline-t {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--hairline);
   }
   .border-hairline-b {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--hairline);
   }
   .border-hairline-l {
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid var(--hairline);
   }
   .border-hairline-r {
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid var(--hairline);
   }
 
   /* Monospace Index Tag */
@@ -133,7 +177,7 @@
   }
 
   .btn-editorial-secondary {
-    @apply inline-flex items-center justify-between gap-4 border border-hairline-strong bg-transparent px-6 py-4 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-chalk transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-chalk hover:bg-white/5 active:scale-[0.98];
+    @apply inline-flex items-center justify-between gap-4 border border-hairline-strong bg-transparent px-6 py-4 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-chalk transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-chalk hover:bg-black/5 dark:hover:bg-white/5 active:scale-[0.98];
   }
 
   /* Interactive Arrow with Refined Motion */
@@ -149,8 +193,8 @@
   /* Subtle Noise/Grain backdrop layer */
   .editorial-grid-bg {
     background-image: 
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(to right, var(--hairline-faint) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--hairline-faint) 1px, transparent 1px);
     background-size: 80px 80px;
   }
 }
